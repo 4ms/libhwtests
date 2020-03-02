@@ -7,6 +7,7 @@ Many of the tests involve user interaction. For example to test an LED button th
 Very much a WIP!
 
 Todo:
+
   * ADC input range tester
     * Helper callbacks for ADC input range testers.
   * ADC channel isolation tester
@@ -19,4 +20,11 @@ Todo:
   * Gate output tester
   * FLASH RAM tester
   * LED tester 
+
+
+To run tests:
+
+```
+make -f tests/Makefile
+```
 

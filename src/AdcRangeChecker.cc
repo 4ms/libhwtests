@@ -20,17 +20,18 @@ AdcCheck_State AdcRangeChecker::check()
 		state = ADCCHECK_AT_MIN;
 		_coverage |= (0b10UL);
 	}
-	if (_cur_val > _bounds.max_val) {
+	else if (_cur_val > _bounds.max_val) {
 		state = ADCCHECK_AT_MAX;
 		_coverage |= (0b01UL);
 	}
-	if (_cur_val>(_bounds.center_val - _bounds.center_width) \
+	else if (_cur_val>(_bounds.center_val - _bounds.center_width) \
 	 && _cur_val<(_bounds.center_val + _bounds.center_width))
 	{
-		state = ADCCHECK_AT_CENTER;
 		_countdown--;
 		if (_countdown==0 && _coverage==0b11)
 			state = ADCCHECK_FULLY_COVERED;
+		else
+			state = ADCCHECK_AT_CENTER;
 	}
 	else {
 		_countdown = _bounds.center_check_counts;

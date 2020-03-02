@@ -65,11 +65,11 @@ CPPUTEST_CXXFLAGS += -Wno-documentation \
 
 #LD_LIBRARIES = -lpthread
 
-#FixMe: only include this if it exists
-include $(CPPUTEST_HOME)/build/MakefileWorker.mk
+-include $(CPPUTEST_HOME)/build/MakefileWorker.mk
 
 .PHONY: cpputest
 cpputest: cpputest/lib/libCppUTest.a
 
 cpputest/lib/libCppUTest.a:
-	cd cpputest; autoreconf . -i && ./configure --enable-std-cpp14 && make tdd
+	cd tests/cpputest; autoreconf . -i && ./configure --enable-std-cpp14 && make tdd && cd ../..
+

@@ -19,6 +19,7 @@ enum AdcCheck_State {
 };
 
 class AdcRangeChecker {
+public:
 	AdcRangeChecker(const AdcRangeCheckerBounds &init);
 	void reset();
 	void set_adcval(uint16_t adcval);
