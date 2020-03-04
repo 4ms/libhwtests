@@ -1,5 +1,8 @@
 #include "hardware_test_adc_check.h"
 
+//Todo: another class with an array of AdcChecks, which runs the loop
+//and also checks for multiple simultaneous non-zero channels
+
 void AdcCheck_init(struct AdcCheck *obj)
 {
 	obj->countdown = obj->center_check_counts;
