@@ -8,7 +8,7 @@ public:
 	void set_button_led_on_func(void func(uint8_t));
 
 	void reset();
-	uint8_t run_check();
+	bool run_check();
 
 private:
 	uint8_t _num_buttons;

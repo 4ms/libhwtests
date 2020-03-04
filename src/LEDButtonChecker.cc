@@ -41,6 +41,6 @@ bool LEDButtonChecker::run_check() {
 			}
 		}
 	}
-	return (buttons_state != 0);
+	return (_buttons_state != 0);
 }
 
