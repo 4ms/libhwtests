@@ -1,4 +1,4 @@
-#include "LEDButtonChecker.hh"
+#include "LEDButtonChecker.h"
 
 LEDButtonChecker::LEDButtonChecker(unsigned num_buttons) 
 	: _num_buttons(num_buttons) {
@@ -8,22 +8,18 @@ LEDButtonChecker::LEDButtonChecker(unsigned num_buttons)
 		_buttons_state = 0;
 	}
 
-void LEDButtonChecker::set_button_read_func(bool func(uint8_t)) {
+void LEDButtonChecker::assign_button_read_func(ButtonReadFuncType func) {
 	_button_read = func;
 }
 
-void LEDButtonChecker::set_button_led_off_func(void func(uint8_t)) {
-	_led_off = func;
-}
-
-void LEDButtonChecker::set_button_led_on_func(void func(uint8_t)) {
-	_led_on = func;
+void LEDButtonChecker::assign_button_led_func(ButtonLEDSetFuncType func) {
+	_set_led = func;
 }
 
 void LEDButtonChecker::reset() {
 	_buttons_state = 0;
 	for (unsigned i=0;i<_num_buttons;i++) {
-		_led_on(i);
+		_set_led(i, true);
 	}
 }
 
@@ -36,7 +32,7 @@ bool LEDButtonChecker::run_check() {
 	if (buttons_pressed == 1) {
 		for (uint8_t button_num=0; button_num<_num_buttons; button_num++) {
 			if (_button_read(button_num)) {
-				_led_off(button_num);
+				_set_led(button_num, false);
 				_buttons_state &= ~(1<<button_num);
 			}
 		}
