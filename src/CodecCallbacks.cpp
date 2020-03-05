@@ -7,7 +7,14 @@ TestRampUpOscillator::TestRampUpOscillator(float freqHz, float max, float min, f
 	, _max(max)
 	, _min(min)
 	, _cur_phase(initial_phase)
-{
+{}
+
+void TestRampUpOscillator::init(float freqHz, float max, float min, float initial_phase, float sample_rate) {
+	_sample_rate = sample_rate;
+	_inc = freqHz/sample_rate;
+	_max = max;
+	_min = min;
+	_cur_phase = initial_phase;
 }
 
 float TestRampUpOscillator::update() {
@@ -16,6 +23,36 @@ float TestRampUpOscillator::update() {
 		_cur_phase -= 1.f;
 
 	return ((_cur_phase * (_max-_min)) + _min);
+}
+
+TestGateOscillator::TestGateOscillator(float sample_rate)
+	: OutputStream(sample_rate)
+{}
+
+TestGateOscillator::TestGateOscillator(float freqHz, float pw, float max, float min, float initial_phase, float sample_rate)
+	: OutputStream(sample_rate)
+	, _inc(freqHz/sample_rate)
+	, _pw(pw)
+	, _max(max)
+	, _min(min)
+	, _cur_phase(initial_phase)
+{}
+
+void TestGateOscillator::init(float freqHz, float pw, float max, float min, float initial_phase, float sample_rate) {
+	_sample_rate = sample_rate;
+	_inc = freqHz/sample_rate;
+	_pw = pw;
+	_max = max;
+	_min = min;
+	_cur_phase = initial_phase;
+}
+
+float TestGateOscillator::update() {
+	_cur_phase += _inc;
+	while (_cur_phase > 1.f)
+		_cur_phase -= 1.f;
+
+	return (_cur_phase < _pw) ? _max : _min;
 }
 
 SkewedTriOsc::SkewedTriOsc(float sample_rate)

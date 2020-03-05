@@ -15,9 +15,10 @@ protected:
 class TestRampUpOscillator : public OutputStream {
 public:
 	TestRampUpOscillator(float freqHz, float max, float min, float initial_phase, float sample_rate);
+	void init(float freqHz, float max, float min, float initial_phase, float sample_rate);
 	float update();
 
-private:
+protected:
 	float _inc;
 	float _max;
 	float _min;
@@ -52,6 +53,21 @@ private:
 	float _flat_start;
 	float _flat_end;
 	float _nonflat_slope;
+	float _max;
+	float _min;
+	float _cur_phase;
+};
+
+class TestGateOscillator : public OutputStream {
+public:
+	TestGateOscillator(float sample_rate=48000.0f);
+	TestGateOscillator(float freqHz, float pw, float max, float min, float initial_phase, float sample_rate);
+	void init(float freqHz, float pw, float max, float min, float initial_phase, float sample_rate);
+	float update();
+
+private:
+	float _inc;
+	float _pw;
 	float _max;
 	float _min;
 	float _cur_phase;
