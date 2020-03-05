@@ -17,13 +17,13 @@ void LEDButtonChecker::assign_button_led_func(ButtonLEDSetFuncType func) {
 }
 
 void LEDButtonChecker::reset() {
-	_buttons_state = 0;
-	for (unsigned i=0;i<_num_buttons;i++) {
-		_set_led(i, true);
+	for (unsigned button_num=0; button_num<_num_buttons; button_num++) {
+		_set_led(button_num, true);
+		_buttons_state |= (1<<button_num);
 	}
 }
 
-bool LEDButtonChecker::run_check() {
+void LEDButtonChecker::run_check() {
 	uint8_t buttons_pressed = 0;
 	for (uint8_t button_num=0; button_num<_num_buttons; button_num++) {
 		if (_button_read(button_num))
@@ -37,6 +37,9 @@ bool LEDButtonChecker::run_check() {
 			}
 		}
 	}
-	return (_buttons_state != 0);
+}
+
+bool LEDButtonChecker::check_done() {
+	return (_buttons_state == 0);
 }
 

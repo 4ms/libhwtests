@@ -10,7 +10,8 @@ public:
 	void assign_button_led_func(ButtonLEDSetFuncType func);
 
 	void reset();
-	bool run_check();
+	void run_check();
+	bool check_done();
 
 private:
 	uint8_t _num_buttons;
