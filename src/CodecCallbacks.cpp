@@ -72,7 +72,7 @@ CenterFlatRamp::CenterFlatRamp(float freqHz, float flat_width, float max, float 
 	, _nonflat_slope(0.5f/_flat_start)
 	, _max(max)
 	, _min(min)
-	, _cur_phase((max-min)*initial_phase)
+	, _cur_phase(initial_phase)
 {}
 
 void CenterFlatRamp::init(float freqHz, float flat_width, float max, float min, float initial_phase, float sample_rate) {
