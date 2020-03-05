@@ -6,16 +6,15 @@ public:
 	OutputStream(float sample_rate) 
 	: _sample_rate(sample_rate)
 	{}
+	virtual float update(){return 0.0f;}
 
-	float update(){return 0.0f;}
-
-private:
+protected:
 	float _sample_rate;
 };
 
 class TestRampUpOscillator : public OutputStream {
+public:
 	TestRampUpOscillator(float freqHz, float max, float min, float initial_phase, float sample_rate);
-
 	float update();
 
 private:
@@ -26,18 +25,28 @@ private:
 };
 
 class SkewedTriOsc : public OutputStream {
+public:
+	SkewedTriOsc(float sample_rate);
 	SkewedTriOsc(float freqHz, float riseRatio, float max, float min, float initial_phase, float sample_rate);
-
+	void init(float freqHz, float riseRatio, float max, float min, float initial_phase);
 	float update();
 
 private:
-	const float _rise_inc;
-	const float _fall_inc;
-	const float _max;
-	const float _min;
+	float _rise_inc;
+	float _fall_inc;
+	float _max;
+	float _min;
 	float _cur_phase;
 	bool _is_rising;
 };
+
+void test_audio_outs_cb(int16_t *src, int16_t *dst, uint16_t sz, uint8_t channel);
+void test_audio_ins_cb(int16_t *src, int16_t *dst, uint16_t sz, uint8_t channel);
+
+void assign_testWaveLeft(OutputStream *s);
+void assign_testWaveRight(OutputStream *s);
+void assign_testWaveLeft_codec2(OutputStream *s);
+void assign_testWaveRight_codec2(OutputStream *s);
 
 /*
 class DualCodecOutputCallback {
