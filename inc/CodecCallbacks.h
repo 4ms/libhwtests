@@ -6,7 +6,8 @@ public:
 	OutputStream(float sample_rate) 
 	: _sample_rate(sample_rate)
 	{}
-	float update();
+
+	float update(){return 0.0f;}
 
 private:
 	float _sample_rate;
@@ -38,15 +39,16 @@ private:
 	bool _is_rising;
 };
 
+/*
 class DualCodecOutputCallback {
 public:
 	DualCodecOutputCallback(OutputStream &ch1LeftOut,
 							OutputStream &ch1RightOut,
 							OutputStream &ch2LeftOut,
 							OutputStream &ch2RightOut)
-		; _ch1LeftOut(ch1LeftOut)
-		, _ch1RigthOut(ch1RightOut)
-		, _ch2LeftOut(ch1LeftOut)
+		: _ch0LeftOut(ch1LeftOut)
+		, _ch1RightOut(ch1RightOut)
+		, _ch1LeftOut(ch1LeftOut)
 		, _ch2RightOut(ch1RightOut)
 		{}
 
@@ -56,7 +58,8 @@ private:
 	OutputStream &_ch2LeftOut;
 	OutputStream &_ch2RightOut;
 };
-
+*/
+/*
 class CodecCallbacks {
 public:
 
@@ -68,4 +71,5 @@ public:
 	static OutputStream *leftOutMulti;
 	static OutputStream *rightOutMulti;
 };
+*/
 

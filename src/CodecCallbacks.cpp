@@ -50,7 +50,8 @@ float SkewedTriOsc::update() {
 	return _cur_phase;
 }
 
-void CodecCallbacks::testwave_out_stereo_multicodec_16(int16_t *src, int16_t *dst, uint16_t sz, uint8_t channel) {
+/*
+void CodecCallbacks::testwave_out_stereo_multicodec_15(int16_t *src, int16_t *dst, uint16_t sz, uint8_t channel) {
 	int32_t *dst32 = (int32_t*)dst;
 
 	for (uint16_t i=0; i<sz; i++)
@@ -60,4 +61,5 @@ void CodecCallbacks::testwave_out_stereo_multicodec_16(int16_t *src, int16_t *ds
 	}
 	(void)(*src);//unused
 }
+*/
 
