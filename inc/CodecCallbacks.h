@@ -3,10 +3,10 @@
 
 class OutputStream {
 public: 
-	OutputStream(float sample_rate) 
+	OutputStream(float sample_rate=48000.0f) 
 	: _sample_rate(sample_rate)
 	{}
-	virtual float update(){return 0.0f;}
+	float update(){return 0.0f;}
 
 protected:
 	float _sample_rate;
@@ -26,9 +26,9 @@ private:
 
 class SkewedTriOsc : public OutputStream {
 public:
-	SkewedTriOsc(float sample_rate);
+	SkewedTriOsc(float sample_rate=48000.0f);
 	SkewedTriOsc(float freqHz, float riseRatio, float max, float min, float initial_phase, float sample_rate);
-	void init(float freqHz, float riseRatio, float max, float min, float initial_phase);
+	void init(float freqHz, float riseRatio, float max, float min, float initial_phase, float sample_rate);
 	float update();
 
 private:
@@ -38,6 +38,23 @@ private:
 	float _min;
 	float _cur_phase;
 	bool _is_rising;
+};
+
+class CenterFlatRamp : public OutputStream {
+public:
+	CenterFlatRamp(float sample_rate=48000.0f);
+	CenterFlatRamp(float freqHz, float flat_width, float max, float min, float initial_phase, float sample_rate);
+	void init(float freqHz, float flat_width, float max, float min, float initial_phase, float sample_rate);
+	float update();
+
+private:
+	float _inc;
+	float _flat_start;
+	float _flat_end;
+	float _nonflat_slope;
+	float _max;
+	float _min;
+	float _cur_phase;
 };
 
 void test_audio_outs_cb(int16_t *src, int16_t *dst, uint16_t sz, uint8_t channel);

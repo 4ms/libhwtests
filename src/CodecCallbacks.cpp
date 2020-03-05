@@ -3,7 +3,7 @@
 
 TestRampUpOscillator::TestRampUpOscillator(float freqHz, float max, float min, float initial_phase, float sample_rate)
 	: OutputStream(sample_rate)
-	, _inc((max-min) * freqHz/sample_rate)
+	, _inc(freqHz/sample_rate)
 	, _max(max)
 	, _min(min)
 	, _cur_phase(initial_phase)
@@ -12,10 +12,10 @@ TestRampUpOscillator::TestRampUpOscillator(float freqHz, float max, float min, f
 
 float TestRampUpOscillator::update() {
 	_cur_phase += _inc;
-	if (_cur_phase > _max)
-		_cur_phase = _min;
+	while (_cur_phase > 1.f)
+		_cur_phase -= 1.f;
 
-	return _cur_phase;
+	return ((_cur_phase * (_max-_min)) + _min);
 }
 
 SkewedTriOsc::SkewedTriOsc(float sample_rate)
@@ -24,22 +24,23 @@ SkewedTriOsc::SkewedTriOsc(float sample_rate)
 
 SkewedTriOsc::SkewedTriOsc(float freqHz, float riseRatio, float max, float min, float initial_phase, float sample_rate)
 	: OutputStream(sample_rate)
-	, _rise_inc(((max-min) * freqHz) / (sample_rate*riseRatio))
-	, _fall_inc(((max-min) * freqHz) / (sample_rate*(1.0f-riseRatio)))
+	, _rise_inc(freqHz / (sample_rate*riseRatio))
+	, _fall_inc(freqHz / (sample_rate*(1.0f-riseRatio)))
 	, _max(max)
 	, _min(min)
 	, _cur_phase(initial_phase)
 {
-	_is_rising = (_cur_phase < ((_max-_min)*riseRatio));
+	_is_rising = (_cur_phase < riseRatio);
 }
 
-void SkewedTriOsc::init(float freqHz, float riseRatio, float max, float min, float initial_phase) {
-	_rise_inc = (max-min) * freqHz / (_sample_rate*riseRatio);
-	_fall_inc = (max-min) * freqHz / (_sample_rate*(1.0f-riseRatio));
+void SkewedTriOsc::init(float freqHz, float riseRatio, float max, float min, float initial_phase, float sample_rate) {
+	_sample_rate = sample_rate;
+	_rise_inc = freqHz / (_sample_rate*riseRatio);
+	_fall_inc = freqHz / (_sample_rate*(1.0f-riseRatio));
 	_max = max;
 	_min = min;
 	_cur_phase = initial_phase;
-	_is_rising = (_cur_phase < ((_max-_min)*riseRatio));
+	_is_rising = (_cur_phase < riseRatio);
 }
 
 float SkewedTriOsc::update() {
@@ -48,16 +49,60 @@ float SkewedTriOsc::update() {
 	else
 		_cur_phase -= _fall_inc;
 
-	if (_cur_phase >= _max) {
+	if (_cur_phase >= 1.0f) {
 		_is_rising = false;
-		_cur_phase = _max;
+		_cur_phase = 1.0f;
 	}
-	if (_cur_phase <= _min) {
+	if (_cur_phase <= 0.0f) {
 		_is_rising = true;
-		_cur_phase = _min;
+		_cur_phase = 0.0f;
 	}
+	return ((_cur_phase * (_max-_min)) + _min);
+}
 
-	return _cur_phase;
+CenterFlatRamp::CenterFlatRamp(float sample_rate)
+	: OutputStream(sample_rate)
+{}
+
+CenterFlatRamp::CenterFlatRamp(float freqHz, float flat_width, float max, float min, float initial_phase, float sample_rate)
+	: OutputStream(sample_rate)
+	, _inc(freqHz / sample_rate)
+	, _flat_start(0.5f - flat_width*0.5f)
+	, _flat_end(0.5f + flat_width*0.5f)
+	, _nonflat_slope(0.5f/_flat_start)
+	, _max(max)
+	, _min(min)
+	, _cur_phase((max-min)*initial_phase)
+{}
+
+void CenterFlatRamp::init(float freqHz, float flat_width, float max, float min, float initial_phase, float sample_rate) {
+	_sample_rate = sample_rate;
+	_inc = freqHz / _sample_rate;
+	_flat_start = 0.5f - flat_width*0.5f;
+	_flat_end = 0.5f + flat_width*0.5f;
+	_nonflat_slope = 0.5f/_flat_start;
+	_max = max;
+	_min = min;
+	_cur_phase = initial_phase;
+}
+
+float CenterFlatRamp::update() {
+	_cur_phase += _inc;
+	while (_cur_phase > 1.0f) {
+		_cur_phase -= 1.0f;
+	}
+	
+	float out;
+	if (_cur_phase < _flat_start)
+		out = _nonflat_slope * _cur_phase;
+
+	else if (_cur_phase < _flat_end)
+		out = 0.5f;
+
+	else
+		out = _nonflat_slope * (_cur_phase - _flat_end) + 0.5f;
+
+	return ((out * (_max-_min)) + _min);
 }
 
 static OutputStream *testWaveLeft;
