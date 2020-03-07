@@ -142,28 +142,7 @@ float CenterFlatRamp::update() {
 	return ((out * (_max-_min)) + _min);
 }
 
-static OutputStream *testWaveLeft;
-static OutputStream *testWaveRight;
-static OutputStream *testWaveLeft_codec2;
-static OutputStream *testWaveRight_codec2;
-
-void assign_testWaveLeft(OutputStream *s) {
-	testWaveLeft = s;
-}
-
-void assign_testWaveRight(OutputStream *s) {
-	testWaveRight = s;
-}
-
-void assign_testWaveLeft_codec2(OutputStream *s) {
-	testWaveLeft_codec2 = s;
-}
-
-void assign_testWaveRight_codec2(OutputStream *s) {
-	testWaveRight_codec2 = s;
-}
-
-void test_audio_outs_cb(int16_t *src, int16_t *dst, uint16_t sz, uint8_t channel) {
+void CodecCallbacks::testWavesOut_2codecs(int16_t *src, int16_t *dst, uint16_t sz, uint8_t channel) {
 	OutputStream *testWaveL, *testWaveR;
 	if (channel==0) {
 		testWaveL = testWaveLeft;
@@ -191,15 +170,15 @@ void test_audio_outs_cb(int16_t *src, int16_t *dst, uint16_t sz, uint8_t channel
 	(void)(*src);//unused
 }
 
-void test_audio_ins_cb(int16_t *src, int16_t *dst, uint16_t sz, uint8_t channel) {
+void CodecCallbacks::passthruPlusTestWave_2codecs(int16_t *src, int16_t *dst, uint16_t sz, uint8_t channel) {
 	OutputStream *testWaveL, *testWaveR;
 	if (channel==0) {
-		testWaveL = testWaveLeft;
-		testWaveR = testWaveRight;
+		testWaveL = leftOut;
+		testWaveR = rightOut;
 	}
 	else if (channel==1) {
-		testWaveL = testWaveLeft_codec2;
-		testWaveR = testWaveRight_codec2;
+		testWaveL = leftOutCodec2;
+		testWaveR = rightOutCodec2;
 	}
 	else return;
 
@@ -217,17 +196,4 @@ void test_audio_ins_cb(int16_t *src, int16_t *dst, uint16_t sz, uint8_t channel)
 		*dst++ = *src++;
 	}
 }
-
-/*
-void CodecCallbacks::testwave_out_stereo_multicodec_15(int16_t *src, int16_t *dst, uint16_t sz, uint8_t channel) {
-	int32_t *dst32 = (int32_t*)dst;
-
-	for (uint16_t i=0; i<sz; i++)
-	{
-		*dst32++ = (int32_t)(leftOutMulti[channel].update());
-		*dst32++ = (int32_t)(rightOutMulti[channel].update());
-	}
-	(void)(*src);//unused
-}
-*/
 

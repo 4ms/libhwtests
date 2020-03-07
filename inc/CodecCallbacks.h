@@ -6,7 +6,7 @@ public:
 	OutputStream(float sample_rate=48000.0f) 
 	: _sample_rate(sample_rate)
 	{}
-	float update(){return 0.0f;}
+	virtual float update() = 0;
 
 protected:
 	float _sample_rate;
@@ -74,44 +74,22 @@ private:
 };
 
 void test_audio_outs_cb(int16_t *src, int16_t *dst, uint16_t sz, uint8_t channel);
-void test_audio_ins_cb(int16_t *src, int16_t *dst, uint16_t sz, uint8_t channel);
+void test_audio_passthruPlusTestWave_cb(int16_t *src, int16_t *dst, uint16_t sz, uint8_t channel);
 
 void assign_testWaveLeft(OutputStream *s);
 void assign_testWaveRight(OutputStream *s);
 void assign_testWaveLeft_codec2(OutputStream *s);
 void assign_testWaveRight_codec2(OutputStream *s);
 
-/*
-class DualCodecOutputCallback {
-public:
-	DualCodecOutputCallback(OutputStream &ch1LeftOut,
-							OutputStream &ch1RightOut,
-							OutputStream &ch2LeftOut,
-							OutputStream &ch2RightOut)
-		: _ch0LeftOut(ch1LeftOut)
-		, _ch1RightOut(ch1RightOut)
-		, _ch1LeftOut(ch1LeftOut)
-		, _ch2RightOut(ch1RightOut)
-		{}
 
-private:
-	OutputStream &_ch1LeftOut;
-	OutputStream &_ch1RightOut;
-	OutputStream &_ch2LeftOut;
-	OutputStream &_ch2RightOut;
+struct CodecCallbacks {
+	//static void testwave_out_stereo_multicodec_16(int16_t *src, int16_t *dst, uint16_t sz, uint8_t channel);
+	static void passthruPlusTestWave_2codecs(int16_t *src, int16_t *dst, uint16_t sz, uint8_t channel);
+
+	static inline OutputStream *leftOut;
+	static inline OutputStream *rightOut;
+	static inline OutputStream *leftOutCodec2;
+	static inline OutputStream *rightOutCodec2;
 };
-*/
-/*
-class CodecCallbacks {
-public:
 
-
-	static void testwave_out_stereo_multicodec_16(int16_t *src, int16_t *dst, uint16_t sz, uint8_t channel);
-
-	static OutputStream *leftOut;
-	static OutputStream *rightOut;
-	static OutputStream *leftOutMulti;
-	static OutputStream *rightOutMulti;
-};
-*/
 
