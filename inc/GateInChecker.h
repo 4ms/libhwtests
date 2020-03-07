@@ -1,8 +1,5 @@
 #pragma once
-#include <stdint.h>
-
-typedef bool (*ReadGateFuncType)(uint8_t gate_num);
-typedef void (*IndicatorOnOffFuncType)(uint8_t indicator_num, bool newstate);
+#include "libhwtests_common.h"
 
 class GateInChecker {
 public:

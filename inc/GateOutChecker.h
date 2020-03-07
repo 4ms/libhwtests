@@ -1,7 +1,5 @@
 #pragma once
-#include <stdint.h>
-
-typedef void (*OutputGateFuncType)(uint8_t gate_num, bool newstate);
+#include "libhwtests_common.h"
 
 //Todo: WIP, not complete
 class GateOutChecker {

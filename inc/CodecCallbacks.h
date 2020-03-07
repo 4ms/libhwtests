@@ -1,5 +1,5 @@
 #pragma once
-#include <stdint.h>
+#include "libhwtests_common.h"
 
 class OutputStream {
 public: 

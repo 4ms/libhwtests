@@ -1,7 +1,5 @@
 #pragma once
-#include <stdint.h>
-
-typedef void (*GateOnOffFuncType)(bool newstate);
+#include "libhwtests_common.h"
 
 class GateOutput {
 public:

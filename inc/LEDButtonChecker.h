@@ -1,7 +1,5 @@
-#include <stdint.h>
-
-typedef bool (*ButtonReadFuncType)(uint8_t button_num);
-typedef void (*ButtonLEDSetFuncType)(uint8_t button_num, bool turn_on);
+#pragma once
+#include "libhwtests_common.h"
 
 class LEDButtonChecker {
 public:
