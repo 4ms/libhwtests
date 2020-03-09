@@ -1,5 +1,5 @@
 #include "CodecCallbacks.h"
-
+//Todo: make base class contain common elements (min/max/phase)
 
 TestRampUpOscillator::TestRampUpOscillator(float freqHz, float max, float min, float initial_phase, float sample_rate)
 	: OutputStream(sample_rate)

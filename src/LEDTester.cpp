@@ -1,6 +1,5 @@
 #include "LEDTester.h"
 
-
 void LEDTester::assign_led_onoff_func(IndicatorOnOffFuncType func) {
 	_set_led = func;
 }
