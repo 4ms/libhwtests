@@ -82,9 +82,11 @@ void assign_testWaveLeft_codec2(OutputStream *s);
 void assign_testWaveRight_codec2(OutputStream *s);
 
 
-struct CodecCallbacks {
+struct CodecCallbacks_DualCodec {
+	using SampleT = int16_t;
 	//static void testwave_out_stereo_multicodec_16(int16_t *src, int16_t *dst, uint16_t sz, uint8_t channel);
-	static void passthruPlusTestWave_2codecs(int16_t *src, int16_t *dst, uint16_t sz, uint8_t channel);
+	static void testWavesOut_2codecs(SampleT *src, int16_t *dst, uint16_t sz, uint8_t channel);
+	static void passthruPlusTestWave_2codecs(SampleT *src, int16_t *dst, uint16_t sz, uint8_t channel);
 
 	static inline OutputStream *leftOut;
 	static inline OutputStream *rightOut;
