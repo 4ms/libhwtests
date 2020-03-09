@@ -73,25 +73,15 @@ private:
 	float _cur_phase;
 };
 
-void test_audio_outs_cb(int16_t *src, int16_t *dst, uint16_t sz, uint8_t channel);
-void test_audio_passthruPlusTestWave_cb(int16_t *src, int16_t *dst, uint16_t sz, uint8_t channel);
-
-void assign_testWaveLeft(OutputStream *s);
-void assign_testWaveRight(OutputStream *s);
-void assign_testWaveLeft_codec2(OutputStream *s);
-void assign_testWaveRight_codec2(OutputStream *s);
-
-
-struct CodecCallbacks_DualCodec {
+struct CodecCallbacks_TwoCodecs {
 	using SampleT = int16_t;
-	//static void testwave_out_stereo_multicodec_16(int16_t *src, int16_t *dst, uint16_t sz, uint8_t channel);
-	static void testWavesOut_2codecs(SampleT *src, int16_t *dst, uint16_t sz, uint8_t channel);
-	static void passthruPlusTestWave_2codecs(SampleT *src, int16_t *dst, uint16_t sz, uint8_t channel);
 
-	static inline OutputStream *leftOut;
-	static inline OutputStream *rightOut;
-	static inline OutputStream *leftOutCodec2;
-	static inline OutputStream *rightOutCodec2;
+	static void testWavesOut(SampleT *src, SampleT *dst, uint16_t sz, uint8_t channel);
+	static void passthruPlusTestWave(SampleT *src, SampleT *dst, uint16_t sz, uint8_t channel);
+
+	static inline OutputStream *leftOutCodec1 = nullptr;
+	static inline OutputStream *rightOutCodec1 = nullptr;
+	static inline OutputStream *leftOutCodec2 = nullptr;
+	static inline OutputStream *rightOutCodec2 = nullptr;
 };
-
 

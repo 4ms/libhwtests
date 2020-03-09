@@ -142,11 +142,11 @@ float CenterFlatRamp::update() {
 	return ((out * (_max-_min)) + _min);
 }
 
-void CodecCallbacks_DualCodec::testWavesOut_2codecs(int16_t *src, int16_t *dst, uint16_t sz, uint8_t channel) {
+void CodecCallbacks_TwoCodecs::testWavesOut(SampleT *src, SampleT *dst, uint16_t sz, uint8_t channel) {
 	OutputStream *testWaveL, *testWaveR;
 	if (channel==0) {
-		testWaveL = leftOut;
-		testWaveR = rightOut;
+		testWaveL = leftOutCodec1;
+		testWaveR = rightOutCodec1;
 	}
 	else if (channel==1) {
 		testWaveL = leftOutCodec2;
@@ -170,11 +170,11 @@ void CodecCallbacks_DualCodec::testWavesOut_2codecs(int16_t *src, int16_t *dst, 
 	(void)(*src);//unused
 }
 
-void CodecCallbacks_DualCodec::passthruPlusTestWave_2codecs(int16_t *src, int16_t *dst, uint16_t sz, uint8_t channel) {
+void CodecCallbacks_TwoCodecs::passthruPlusTestWave(SampleT *src, SampleT *dst, uint16_t sz, uint8_t channel) {
 	OutputStream *testWaveL, *testWaveR;
 	if (channel==0) {
-		testWaveL = leftOut;
-		testWaveR = rightOut;
+		testWaveL = leftOutCodec1;
+		testWaveR = rightOutCodec1;
 	}
 	else if (channel==1) {
 		testWaveL = leftOutCodec2;
