@@ -1,4 +1,4 @@
-#include "AdcRangeChecker.hh"
+#include "AdcRangeChecker.h"
 
 AdcRangeChecker::AdcRangeChecker(const AdcRangeCheckerBounds &init)
 : _bounds(init)
