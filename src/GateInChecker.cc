@@ -5,6 +5,7 @@
 
 IGateInChecker::IGateInChecker(uint8_t num_channels) 
 	: _num_channels(num_channels)
+	, _num_repeats(10)
 {
 }
 
@@ -20,21 +21,21 @@ void IGateInChecker::reset() {
 	_error = ErrorType::None;
 
 	_set_test_signal(false);
-	_set_error_indicator(_error);
-	for (int i=0; i<_num_channels; i++)
+	for (int i=0; i<_num_channels; i++) {
 		_set_indicator(i, false);
+		_set_error_indicator(i, ErrorType::None);
+	}
 }
 
-IGateInChecker::ErrorType IGateInChecker::get_error() {
-	return _error;
+bool IGateInChecker::check()
+{
+	_check_current_gate_in();
+	_check_max_one_gate_high();
+	return (_cur_test_chan >= _num_channels);
 }
 
-uint8_t IGateInChecker::num_gates_high() {
-	return _num_gates_high;
-}
-
-bool IGateInChecker::check() {
-
+void IGateInChecker::_check_current_gate_in()
+{
 	bool gatestate = _read_gate(_cur_test_chan);
 	_set_indicator(_cur_test_chan, gatestate);
 
@@ -57,13 +58,20 @@ bool IGateInChecker::check() {
 			_error = ErrorType::StuckLow;
 	}
 
-	if (_cur_test_state >= 10)
+	_set_error_indicator(_cur_test_chan, _error);
+
+	if (_cur_test_state >= _num_repeats)
 	{
+		_error = ErrorType::None;
+		_set_indicator(_cur_test_chan, false);
 		_cur_test_chan++;
 		_cur_test_state = 0;
 		_set_test_signal(false);
 	}
+}
 
+void IGateInChecker::_check_max_one_gate_high()
+{
 	_num_gates_high = 0;
 
 	for (int i=0; i<_num_channels; i++) {
@@ -71,11 +79,17 @@ bool IGateInChecker::check() {
 			_num_gates_high++;
 	}
 
-	if (num_gates_high() > 1)
+	if (_num_gates_high > 1)
 		_error = ErrorType::MultipleHighs;
 
-	_set_error_indicator(_error);
+	_set_error_indicator(_cur_test_chan, _error);
+}
 
-	return (_cur_test_chan >= _num_channels);
+void IGateInChecker::set_num_toggles(uint32_t num_toggles) {
+	_num_repeats = num_toggles;
+}
+
+IGateInChecker::ErrorType IGateInChecker::get_error() {
+	return _error;
 }
 
