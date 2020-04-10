@@ -1,28 +1,32 @@
 #pragma once
 #include "libhwtests_common.h"
 
-class GateInChecker {
+class IGateInChecker {
 public:
-	GateInChecker(uint8_t num_channels) {
-//		assert(num_channels<32);
-		if (num_channels>32)
-			num_channels = 32;
-		_num_channels = num_channels;
-	}
-
-	void assign_read_gate_func(ReadGateFuncType read_gate_func);
-	void assign_indicator_func(IndicatorOnOffFuncType indicator_func);
-
+	IGateInChecker(uint8_t num_channels);
 	bool check();
 	void reset();
 	uint8_t num_gates_high();
 
+	enum class ErrorType {
+		None,
+		StuckHigh,
+		StuckLow,
+		MultipleHighs
+	};
+	ErrorType get_error();
+
+protected:
+	virtual bool _read_gate(uint8_t gate_num) = 0;
+	virtual void _set_test_signal(bool newstate) = 0;
+	virtual void _set_error_indicator(ErrorType err) = 0;
+	virtual void _set_indicator(uint8_t indicate_num, bool newstate) = 0;
+
 private:
-	ReadGateFuncType _read_gate;
-	IndicatorOnOffFuncType _set_indicator;
+	enum ErrorType _error;
 	uint8_t _num_channels;
-	uint32_t _coverage_high;
-	uint32_t _coverage_low;
 	uint8_t _num_gates_high;
+	uint8_t _cur_test_chan;
+	uint8_t _cur_test_state;
 };
 
