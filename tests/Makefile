@@ -12,7 +12,7 @@ PROJECT_HOME_DIR = .
 
 SRC_FILES = \
 	src/AdcRangeChecker.cc \
-	src/LEDButtonChecker.cc
+	src/ButtonChecker.cc
 
 # SRC_DIRS = \
 # 	src \
