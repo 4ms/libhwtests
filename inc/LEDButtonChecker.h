@@ -4,9 +4,11 @@
 class ILEDButtonChecker {
 public:
 	ILEDButtonChecker(uint8_t num_channels);
+	virtual ~ILEDButtonChecker() {}
 	bool check();
 	void reset();
 	void set_min_steady_state_time(uint32_t min_hold_time);
+	uint8_t button_under_test();
 
 	enum class ErrorType {
 		None,
@@ -26,6 +28,7 @@ protected:
 private:
 	enum ErrorType _error;
 	uint8_t _num_buttons;
+	uint32_t _debounce_timer;
 	uint8_t _cur_test_chan;
 	unsigned _test_state;
 	unsigned _min_hold_time;

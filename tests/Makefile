@@ -11,7 +11,8 @@ CC = gcc
 PROJECT_HOME_DIR = .
 
 SRC_FILES = \
-	src/AdcRangeChecker.cc
+	src/AdcRangeChecker.cc \
+	src/LEDButtonChecker.cc
 
 # SRC_DIRS = \
 # 	src \

@@ -4,6 +4,7 @@
 class IGateInChecker {
 public:
 	IGateInChecker(uint8_t num_channels);
+	virtual ~IGateInChecker() {}
 	bool check();
 	void reset();
 	void set_num_toggles(uint32_t num_toggles);

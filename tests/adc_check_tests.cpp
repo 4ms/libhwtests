@@ -1,6 +1,6 @@
 #include "CppUTest/TestHarness.h"
 #include <fff.h>
-#include "AdcRangeChecker.hh"
+#include "AdcRangeChecker.h"
 
 //#define DEBUGMODE
 
