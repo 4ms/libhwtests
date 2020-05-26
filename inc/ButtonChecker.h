@@ -42,6 +42,6 @@ private:
 	uint32_t _debounce_timer;
 	uint8_t _cur_test_chan;
 	unsigned _min_hold_time;
-	void _check_current_button();
+	bool _check_current_button();
 };
 

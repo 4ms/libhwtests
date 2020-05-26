@@ -16,21 +16,24 @@ void IButtonChecker::reset() {
 		_set_indicator(i, false);
 		_set_error_indicator(i, ErrorType::None);
 	}
+	_set_indicator(_cur_test_chan, true);
 }
 
 bool IButtonChecker::check() {
-	_check_current_button();
-	_set_error_indicator(_cur_test_chan, _channel_error[_cur_test_chan]);
+	bool is_new_error = _check_current_button();
+	if (is_new_error)
+		_set_error_indicator(_cur_test_chan, _channel_error[_cur_test_chan]);
 	_check_max_one_pin_changed();
 	bool is_done = (_cur_test_chan >= _num_buttons);
 	return !is_done;
 }
 
-void IButtonChecker::_check_current_button() {
+bool IButtonChecker::_check_current_button() {
+	bool is_new_error = false;
 	bool but_pressed = _read_button(_cur_test_chan);
+
 	switch (_test_state) {
 		case WaitingFor::Press:
-			_set_indicator(_cur_test_chan, true);
 			if (but_pressed) {
 				_test_state = WaitingFor::StablePress;
 				_debounce_timer = 1;
@@ -42,8 +45,12 @@ void IButtonChecker::_check_current_button() {
 			if (_debounce_timer >= _min_hold_time) {
 				_test_state = WaitingFor::Release;
 			}
-			else if (!but_pressed)
-				_channel_error[_cur_test_chan] = ErrorType::NoisyPress;
+			else if (!but_pressed) {
+				if (_channel_error[_cur_test_chan] != ErrorType::NoisyPress) {
+					_channel_error[_cur_test_chan] = ErrorType::NoisyPress;
+					is_new_error = true;
+				}
+			}
 			break;
 
 		case WaitingFor::Release:
@@ -55,15 +62,21 @@ void IButtonChecker::_check_current_button() {
 
 		case WaitingFor::StableRelease:
 			_debounce_timer++;
-			if (but_pressed)
-				_channel_error[_cur_test_chan] = ErrorType::NoisyRelease;
+			if (but_pressed) {
+				if (_channel_error[_cur_test_chan] != ErrorType::NoisyRelease) {
+					_channel_error[_cur_test_chan] = ErrorType::NoisyRelease;
+					is_new_error = true;
+				}
+			}
 			else if (_debounce_timer >= _min_hold_time) {
 				_set_indicator(_cur_test_chan, false);
 				_cur_test_chan++;
+				_set_indicator(_cur_test_chan, true);
 				_test_state = WaitingFor::Press;
 			}
 			break;
 	}
+	return is_new_error;
 }
 
 void IButtonChecker::set_min_steady_state_time(uint32_t min_hold_time) {
