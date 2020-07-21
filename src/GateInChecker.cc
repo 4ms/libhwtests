@@ -10,12 +10,6 @@ IGateInChecker::IGateInChecker(uint8_t num_channels)
 }
 
 void IGateInChecker::reset() {
-	uint32_t coverage;
-	if (_num_channels==32)
-		coverage=0xFFFFFFFF;
-	else
-		coverage = (1<<_num_channels)-1;
-
 	_cur_test_chan = 0;
 	_cur_test_state = 0;
 	_error = ErrorType::None;
