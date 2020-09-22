@@ -85,3 +85,40 @@ struct CodecCallbacks_TwoCodecs {
 	static inline OutputStream *rightOutCodec2 = nullptr;
 };
 
+template <typename SampleT, int BlockSz>
+struct CodecCallbacks {
+	static inline OutputStream *leftStream = nullptr;
+	static inline OutputStream *rightStream = nullptr;
+
+	static void testWavesOut(SampleT *src, SampleT *dst) {
+		if (leftStream==nullptr || rightStream==nullptr) return;
+
+		for (uint16_t i=0; i<BlockSz/2; i++)
+		{
+			float l_sample = leftStream->update();
+			*dst++ = (SampleT)l_sample;
+			if (sizeof(SampleT) <= 2) *dst++ = 0;
+
+			float r_sample = rightStream->update();
+			*dst++ = (SampleT)r_sample;
+			if (sizeof(SampleT) <= 2) *dst++ = 0;
+		}
+		
+		(void)(*src);//unused
+	}
+
+	static void passthruPlusTestWave(SampleT *src, SampleT *dst) {
+		for (uint16_t i=0; i<BlockSz/2; i++)
+		{
+			float l_sample = leftStream->update();
+			*dst++ = ((int16_t)l_sample)/2 + (*src++);
+			if (sizeof(SampleT) <= 2) *dst++ = *src++;
+
+			float r_sample = rightStream->update();
+			*dst++ = ((int16_t)r_sample)/2 + (*src++);
+			if (sizeof(SampleT) <= 2) *dst++ = *src++;
+		}
+
+	}
+};
+
