@@ -85,6 +85,9 @@ struct CodecCallbacks_TwoCodecs {
 	static inline OutputStream *rightOutCodec2 = nullptr;
 };
 
+//Todo: make it more clear how to use:
+//SampleT <-- int16_t for 16-bit samples within frames with 32-bits per channel (padding will be added after sample data)
+//SampleT <-- int32_t for 24-bit samples within frames with 32-bits per channel (must pad before calling)
 template <typename SampleT, int BlockSz>
 struct CodecCallbacks {
 	static inline OutputStream *leftStream = nullptr;
@@ -93,7 +96,7 @@ struct CodecCallbacks {
 	static void testWavesOut(SampleT *src, SampleT *dst) {
 		if (leftStream==nullptr || rightStream==nullptr) return;
 
-		for (uint16_t i=0; i<BlockSz/2; i++)
+		for (int i=0; i<BlockSz; i++)
 		{
 			float l_sample = leftStream->update();
 			*dst++ = (SampleT)l_sample;
@@ -108,14 +111,14 @@ struct CodecCallbacks {
 	}
 
 	static void passthruPlusTestWave(SampleT *src, SampleT *dst) {
-		for (uint16_t i=0; i<BlockSz/2; i++)
+		for (int i=0; i<BlockSz; i++)
 		{
 			float l_sample = leftStream->update();
-			*dst++ = ((int16_t)l_sample)/2 + (*src++);
+			*dst++ = ((SampleT)l_sample)/2 + (*src++);
 			if (sizeof(SampleT) <= 2) *dst++ = *src++;
 
 			float r_sample = rightStream->update();
-			*dst++ = ((int16_t)r_sample)/2 + (*src++);
+			*dst++ = ((SampleT)r_sample)/2 + (*src++);
 			if (sizeof(SampleT) <= 2) *dst++ = *src++;
 		}
 
