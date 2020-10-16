@@ -2,9 +2,10 @@
 
 IButtonChecker::IButtonChecker(uint8_t num_buttons)
 	: _num_buttons(num_buttons > kMaxChannels ? kMaxChannels : num_buttons)
-	, _min_hold_time(100)
+	, _min_hold_time(200)
+	, _allowable_noise(100)
+	, _cur_test_chan(0)
 	{
-		//assert(num_buttons<=kMaxChannels)
 	}
 
 void IButtonChecker::reset() {
@@ -46,9 +47,11 @@ bool IButtonChecker::_check_current_button() {
 				_test_state = WaitingFor::Release;
 			}
 			else if (!but_pressed) {
-				if (_channel_error[_cur_test_chan] != ErrorType::NoisyPress) {
-					_channel_error[_cur_test_chan] = ErrorType::NoisyPress;
-					is_new_error = true;
+				if (_debounce_timer > _allowable_noise) {
+					if (_channel_error[_cur_test_chan] != ErrorType::NoisyPress) {
+						_channel_error[_cur_test_chan] = ErrorType::NoisyPress;
+						is_new_error = true;
+					}
 				}
 			}
 			break;
@@ -63,9 +66,11 @@ bool IButtonChecker::_check_current_button() {
 		case WaitingFor::StableRelease:
 			_debounce_timer++;
 			if (but_pressed) {
-				if (_channel_error[_cur_test_chan] != ErrorType::NoisyRelease) {
-					_channel_error[_cur_test_chan] = ErrorType::NoisyRelease;
-					is_new_error = true;
+				if (_debounce_timer > _allowable_noise) {
+					if (_channel_error[_cur_test_chan] != ErrorType::NoisyRelease) {
+						_channel_error[_cur_test_chan] = ErrorType::NoisyRelease;
+						is_new_error = true;
+					}
 				}
 			}
 			else if (_debounce_timer >= _min_hold_time) {
@@ -81,6 +86,10 @@ bool IButtonChecker::_check_current_button() {
 
 void IButtonChecker::set_min_steady_state_time(uint32_t min_hold_time) {
 	_min_hold_time = min_hold_time;
+}
+
+void IButtonChecker::set_allowable_noise(uint32_t allowable_noise) {
+	_allowable_noise = allowable_noise;
 }
 
 uint8_t IButtonChecker::button_under_test() {

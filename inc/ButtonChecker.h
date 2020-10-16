@@ -10,6 +10,7 @@ public:
 	bool check();
 	void reset();
 	void set_min_steady_state_time(uint32_t min_hold_time);
+	void set_allowable_noise(uint32_t allowable_noise);
 	uint8_t button_under_test();
 
 	enum class ErrorType {
@@ -42,6 +43,7 @@ private:
 	uint32_t _debounce_timer;
 	uint8_t _cur_test_chan;
 	unsigned _min_hold_time;
+	unsigned _allowable_noise;
 	bool _check_current_button();
 };
 
