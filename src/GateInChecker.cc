@@ -25,7 +25,8 @@ bool IGateInChecker::check()
 {
 	_check_current_gate_in();
 	_check_max_one_gate_high();
-	return (_cur_test_chan >= _num_channels);
+	bool is_done = _cur_test_chan >= _num_channels;
+	return !is_done;
 }
 
 void IGateInChecker::_check_current_gate_in()
