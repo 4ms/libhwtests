@@ -73,6 +73,14 @@ private:
 	float _cur_phase;
 };
 
+class ManualValue : public OutputStream {
+	float _val;
+	public:
+		ManualValue() : OutputStream(48000.f) { _val=0; }
+		virtual float update() { return _val; }
+		void set_val(const float val) { _val = val; }
+};
+
 struct CodecCallbacks_TwoCodecs {
 	using SampleT = int16_t;
 
