@@ -19,10 +19,10 @@ public:
 
 
 protected:
-	virtual bool _read_gate(uint8_t gate_num) = 0;
-	virtual void _set_test_signal(bool newstate) = 0;
-	virtual void _set_error_indicator(uint8_t channel, ErrorType err) = 0;
-	virtual void _set_indicator(uint8_t indicate_num, bool newstate) = 0;
+	virtual bool read_gate(uint8_t gate_num) = 0;
+	virtual void set_test_signal(bool newstate) = 0;
+	virtual void set_error_indicator(uint8_t channel, ErrorType err) = 0;
+	virtual void set_indicator(uint8_t indicate_num, bool newstate) = 0;
 
 private:
 	enum ErrorType _error;
