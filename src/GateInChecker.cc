@@ -9,6 +9,10 @@ IGateInChecker::IGateInChecker(uint8_t num_channels)
 {
 }
 
+void IGateInChecker::clear_error() {
+	_error = ErrorType::None;
+}
+
 void IGateInChecker::reset() {
 	_cur_test_chan = 0;
 	_cur_test_state = 0;
@@ -31,8 +35,12 @@ bool IGateInChecker::check()
 
 void IGateInChecker::_check_current_gate_in()
 {
+	set_indicator(_cur_test_chan, true);
+
+	if ((_cur_test_state == 1) && (!is_ready_to_read_jack(_cur_test_chan)))
+		return;
+
 	bool gatestate = read_gate(_cur_test_chan);
-	set_indicator(_cur_test_chan, gatestate);
 
 	if ((_cur_test_state & 0b1) == 0)
 	{
@@ -49,8 +57,10 @@ void IGateInChecker::_check_current_gate_in()
 			_cur_test_state++;
 			set_test_signal(false);
 		}
-		else if (_cur_test_state>=2)
+		else if (_cur_test_state>=2) {
+			_cur_test_state = 1;
 			_error = ErrorType::StuckLow;
+		}
 	}
 
 	set_error_indicator(_cur_test_chan, _error);
@@ -62,6 +72,7 @@ void IGateInChecker::_check_current_gate_in()
 		_cur_test_chan++;
 		_cur_test_state = 0;
 		set_test_signal(false);
+		signal_jack_done(_cur_test_chan);
 	}
 }
 
