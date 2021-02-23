@@ -2,9 +2,9 @@
 
 IButtonChecker::IButtonChecker(uint8_t num_buttons)
 	: _num_buttons(num_buttons > kMaxChannels ? kMaxChannels : num_buttons)
+	, _cur_test_chan(0)
 	, _min_hold_time(200)
 	, _allowable_noise(100)
-	, _cur_test_chan(0)
 	{
 	}
 
