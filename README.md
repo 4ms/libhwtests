@@ -6,7 +6,8 @@ Many of the tests involve user interaction. For example to test an LED button th
 
 These tests are not meant to be used to test if driver code is written properly (hardware integration tests), nor are they to be run every time you compile (like unit tests might be). Instead, this library is useful for writing a test procedure to be performed on a production batch of hardware, in order to quickly give each unit a pass/fail result. In addition, a "fail" result also gives a specific error code which can be recorded by the testing person, and used in repair/rework.
 
-The library relies heavily on function pointers, in order to make it easy to adapt to C.
+The C++ version of this library requires you to create a class which defines certain virtual functions that interact with the hardware.
+The C version relies on function pointers.
 
 Written with STM32 and ESP32 chips and gcc in mind.
 
@@ -23,12 +24,12 @@ Todo:
   * LED Button tester [done]
   * Toggle switch tester (2 or 3 position)
   * Gate input tester [done]
-  * Gate output tester
+  * Gate output tester [done]
   * FLASH RAM tester
-  * LED tester 
+  * LED tester [done]
 
 
-To run tests:
+To run unit tests:
 
 ```
 make -f tests/Makefile
