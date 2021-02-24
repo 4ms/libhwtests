@@ -1,5 +1,5 @@
 #pragma once
-#include "libhwtests_common.h"
+#include <cstdint>
 
 struct AdcRangeCheckerBounds {
 	const uint16_t center_val;

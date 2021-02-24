@@ -1,39 +1,32 @@
-#include "AdcRangeChecker.h"
+#include "AdcRangeChecker.hh"
 
 AdcRangeChecker::AdcRangeChecker(const AdcRangeCheckerBounds &init)
-: _bounds(init)
-{
+	: _bounds(init) {
 	reset();
 }
 
-void AdcRangeChecker::reset()
-{
+void AdcRangeChecker::reset() {
 	_coverage = 0;
 	_countdown = _bounds.center_check_counts;
 }
 
-AdcCheck_State AdcRangeChecker::check()
-{
+AdcCheck_State AdcRangeChecker::check() {
 	enum AdcCheck_State state;
 
 	if (_cur_val < _bounds.min_val) {
 		state = ADCCHECK_AT_MIN;
 		_coverage |= (0b10UL);
-	}
-	else if (_cur_val > _bounds.max_val) {
+	} else if (_cur_val > _bounds.max_val) {
 		state = ADCCHECK_AT_MAX;
 		_coverage |= (0b01UL);
-	}
-	else if (_cur_val>(_bounds.center_val - _bounds.center_width) \
-	 && _cur_val<(_bounds.center_val + _bounds.center_width))
+	} else if (_cur_val > (_bounds.center_val - _bounds.center_width) && _cur_val < (_bounds.center_val + _bounds.center_width))
 	{
 		_countdown--;
-		if (_countdown==0 && _coverage==0b11)
+		if (_countdown == 0 && _coverage == 0b11)
 			state = ADCCHECK_FULLY_COVERED;
 		else
 			state = ADCCHECK_AT_CENTER;
-	}
-	else {
+	} else {
 		_countdown = _bounds.center_check_counts;
 		state = ADCCHECK_ELSEWHERE;
 	}
@@ -41,8 +34,7 @@ AdcCheck_State AdcRangeChecker::check()
 	return state;
 }
 
-void AdcRangeChecker::set_adcval(uint16_t adcval)
-{
+void AdcRangeChecker::set_adcval(uint16_t adcval) {
 	_cur_val = adcval;
 }
 
