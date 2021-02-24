@@ -1,5 +1,5 @@
 #pragma once
-#include "libhwtests_common.h"
+#include <cstdint>
 
 const unsigned kMaxChannels = 32;
 

@@ -11,16 +11,14 @@ struct IHardwareTestUtil {
 
 	static void pause_until_button_pressed(void) {
 		Base::delay_ms(10);
-		while (!Base::main_button_pressed()) {
+		while (!Base::main_button_pressed())
 			;
-		}
 	}
 
 	static void pause_until_button_released(void) {
 		Base::delay_ms(10);
-		while (Base::main_button_pressed()) {
+		while (Base::main_button_pressed())
 			;
-		}
 	}
 
 	static void pause_until_button(void) {
