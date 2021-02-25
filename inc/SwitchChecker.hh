@@ -17,6 +17,7 @@ public:
 
 	ISwitchChecker() {}
 	virtual ~ISwitchChecker() {}
+	//FixMe: Why is this required?
 	void operator delete(void *, unsigned int) {}
 
 	virtual SwitchPosition read_switch_state(uint32_t sw_num) = 0;

@@ -5,6 +5,7 @@ class IGateInChecker {
 public:
 	IGateInChecker(uint8_t num_channels);
 	virtual ~IGateInChecker() {}
+
 	bool check();
 	void reset();
 	void set_num_toggles(uint32_t num_toggles);
@@ -18,6 +19,8 @@ public:
 	};
 	ErrorType get_error();
 
+	//FixMe: Why is this required?
+	void operator delete(void*, unsigned int){}
 
 protected:
 	virtual bool read_gate(uint8_t gate_num) = 0;
@@ -36,5 +39,6 @@ private:
 	unsigned _num_repeats;
 	void _check_current_gate_in();
 	void _check_max_one_gate_high();
+
 };
 
