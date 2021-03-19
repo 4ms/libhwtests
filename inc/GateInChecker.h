@@ -4,7 +4,7 @@
 class IGateInChecker {
 public:
 	IGateInChecker(uint8_t num_channels);
-	virtual ~IGateInChecker() {}
+	virtual ~IGateInChecker() = default;
 
 	bool check();
 	void reset();
@@ -20,7 +20,8 @@ public:
 	ErrorType get_error();
 
 	//FixMe: Why is this required?
-	void operator delete(void*, unsigned int){}
+	//Answer: https://alex-robenko.gitbook.io/bare_metal_cpp/compiler_output/abstract_classes
+	 void operator delete(void*, unsigned int){}
 
 protected:
 	virtual bool read_gate(uint8_t gate_num) = 0;
