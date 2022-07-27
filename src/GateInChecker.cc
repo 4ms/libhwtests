@@ -33,6 +33,11 @@ bool IGateInChecker::check()
 	return !is_done;
 }
 
+void IGateInChecker::skip() {
+	set_indicator(_cur_test_chan, false);
+	_cur_test_chan++;
+}
+
 void IGateInChecker::_check_current_gate_in()
 {
 	set_indicator(_cur_test_chan, true);
