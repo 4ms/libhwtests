@@ -6,7 +6,8 @@ const unsigned kMaxChannels = 32;
 class IButtonChecker {
 public:
 	IButtonChecker(uint8_t num_channels);
-	virtual ~IButtonChecker() {}
+	virtual ~IButtonChecker() {
+	}
 	bool check();
 	void reset();
 	void set_min_steady_state_time(uint32_t min_hold_time);
@@ -23,6 +24,8 @@ public:
 	};
 	ErrorType get_error(unsigned channel);
 
+	void operator delete(void *, unsigned int) {
+	}
 
 protected:
 	virtual bool _read_button(uint8_t channel) = 0;
@@ -46,4 +49,3 @@ private:
 	unsigned _allowable_noise;
 	bool _check_current_button();
 };
-
