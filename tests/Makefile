@@ -28,7 +28,7 @@ INCLUDE_DIRS =\
   tests/ \
   tests/stubs \
   tests/stubs/driver \
-  inc \
+  inc/libhwtests \
 
 MOCKS_SRC_DIRS = \
 	mocks \
