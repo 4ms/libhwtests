@@ -1,4 +1,4 @@
-#include "CodecCallbacks.hh"
+#include "libhwtests/CodecCallbacks.hh"
 //Todo: make base class contain common elements (min/max/phase)
 
 TestRampUpOscillator::TestRampUpOscillator(float freqHz, float max, float min, float initial_phase, float sample_rate)
@@ -6,7 +6,8 @@ TestRampUpOscillator::TestRampUpOscillator(float freqHz, float max, float min, f
 	, _inc(freqHz / sample_rate)
 	, _max(max)
 	, _min(min)
-	, _cur_phase(initial_phase) {}
+	, _cur_phase(initial_phase) {
+}
 
 void TestRampUpOscillator::init(float freqHz, float max, float min, float initial_phase, float sample_rate) {
 	_sample_rate = sample_rate;
@@ -25,15 +26,18 @@ float TestRampUpOscillator::update() {
 }
 
 TestGateOscillator::TestGateOscillator(float sample_rate)
-	: OutputStream(sample_rate) {}
+	: OutputStream(sample_rate) {
+}
 
-TestGateOscillator::TestGateOscillator(float freqHz, float pw, float max, float min, float initial_phase, float sample_rate)
+TestGateOscillator::TestGateOscillator(
+	float freqHz, float pw, float max, float min, float initial_phase, float sample_rate)
 	: OutputStream(sample_rate)
 	, _inc(freqHz / sample_rate)
 	, _pw(pw)
 	, _max(max)
 	, _min(min)
-	, _cur_phase(initial_phase) {}
+	, _cur_phase(initial_phase) {
+}
 
 void TestGateOscillator::init(float freqHz, float pw, float max, float min, float initial_phase, float sample_rate) {
 	_sample_rate = sample_rate;
@@ -53,7 +57,8 @@ float TestGateOscillator::update() {
 }
 
 SkewedTriOsc::SkewedTriOsc(float sample_rate)
-	: OutputStream(sample_rate) {}
+	: OutputStream(sample_rate) {
+}
 
 SkewedTriOsc::SkewedTriOsc(float freqHz, float riseRatio, float max, float min, float initial_phase, float sample_rate)
 	: OutputStream(sample_rate)
@@ -93,9 +98,11 @@ float SkewedTriOsc::update() {
 }
 
 CenterFlatRamp::CenterFlatRamp(float sample_rate)
-	: OutputStream(sample_rate) {}
+	: OutputStream(sample_rate) {
+}
 
-CenterFlatRamp::CenterFlatRamp(float freqHz, float flat_width, float max, float min, float initial_phase, float sample_rate)
+CenterFlatRamp::CenterFlatRamp(
+	float freqHz, float flat_width, float max, float min, float initial_phase, float sample_rate)
 	: OutputStream(sample_rate)
 	, _inc(freqHz / sample_rate)
 	, _flat_start(0.5f - flat_width * 0.5f)
@@ -103,9 +110,11 @@ CenterFlatRamp::CenterFlatRamp(float freqHz, float flat_width, float max, float 
 	, _nonflat_slope(0.5f / _flat_start)
 	, _max(max)
 	, _min(min)
-	, _cur_phase(initial_phase) {}
+	, _cur_phase(initial_phase) {
+}
 
-void CenterFlatRamp::init(float freqHz, float flat_width, float max, float min, float initial_phase, float sample_rate) {
+void CenterFlatRamp::init(
+	float freqHz, float flat_width, float max, float min, float initial_phase, float sample_rate) {
 	_sample_rate = sample_rate;
 	_inc = freqHz / _sample_rate;
 	_flat_start = 0.5f - flat_width * 0.5f;
@@ -149,8 +158,7 @@ void CodecCallbacks_TwoCodecs::testWavesOut(SampleT *src, SampleT *dst, uint16_t
 	if (testWaveL == nullptr || testWaveR == nullptr)
 		return;
 
-	for (uint16_t i = 0; i < sz / 2; i++)
-	{
+	for (uint16_t i = 0; i < sz / 2; i++) {
 		float leftOut = testWaveL->update();
 		*dst++ = (int16_t)leftOut;
 		*dst++ = 0;
@@ -176,8 +184,7 @@ void CodecCallbacks_TwoCodecs::passthruPlusTestWave(SampleT *src, SampleT *dst, 
 	if (testWaveL == nullptr || testWaveR == nullptr)
 		return;
 
-	for (uint16_t i = 0; i < sz / 2; i++)
-	{
+	for (uint16_t i = 0; i < sz / 2; i++) {
 		float leftOut = testWaveL->update();
 		*dst++ = ((int16_t)leftOut) / 2 + (*src++);
 		*dst++ = *src++;
@@ -187,4 +194,3 @@ void CodecCallbacks_TwoCodecs::passthruPlusTestWave(SampleT *src, SampleT *dst, 
 		*dst++ = *src++;
 	}
 }
-

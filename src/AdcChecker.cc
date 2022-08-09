@@ -1,14 +1,10 @@
-#include "AdcChecker.hh"
+#include "libhwtests/AdcChecker.hh"
 
 void IAdcChecker::run_test() {
 	for (uint32_t i = 0; i < num_adc; i++) {
-		AdcType cur_adctype = i < num_pots					 ? Pot :
-							  i < (num_pots + num_bipolarCV) ? BipolarCV :
-																 UnipolarCV;
+		AdcType cur_adctype = i < num_pots ? Pot : i < (num_pots + num_bipolarCV) ? BipolarCV : UnipolarCV;
 
-		auto adc_i = cur_adctype == Pot		  ? i :
-					 cur_adctype == BipolarCV ? i - num_pots :
-												  i - num_pots - num_bipolarCV;
+		auto adc_i = cur_adctype == Pot ? i : cur_adctype == BipolarCV ? i - num_pots : i - num_pots - num_bipolarCV;
 
 		pause_between_steps();
 		set_indicator(adc_i, cur_adctype, ADCCHECK_NO_COVERAGE);
@@ -49,4 +45,3 @@ void IAdcChecker::run_test() {
 		delay_ms(100);
 	}
 }
-

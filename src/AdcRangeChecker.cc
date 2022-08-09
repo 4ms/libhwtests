@@ -1,4 +1,4 @@
-#include "AdcRangeChecker.hh"
+#include "libhwtests/AdcRangeChecker.hh"
 
 AdcRangeChecker::AdcRangeChecker(const AdcRangeCheckerBounds &init)
 	: _bounds(init) {
@@ -19,7 +19,8 @@ AdcCheck_State AdcRangeChecker::check() {
 	} else if (_cur_val > _bounds.max_val) {
 		state = ADCCHECK_AT_MAX;
 		_coverage |= (0b01UL);
-	} else if (_cur_val > (_bounds.center_val - _bounds.center_width) && _cur_val < (_bounds.center_val + _bounds.center_width))
+	} else if (_cur_val > (_bounds.center_val - _bounds.center_width) &&
+			   _cur_val < (_bounds.center_val + _bounds.center_width))
 	{
 		_countdown--;
 		if (_countdown == 0 && _coverage == 0b11)
@@ -37,4 +38,3 @@ AdcCheck_State AdcRangeChecker::check() {
 void AdcRangeChecker::set_adcval(uint16_t adcval) {
 	_cur_val = adcval;
 }
-

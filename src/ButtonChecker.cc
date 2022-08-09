@@ -1,18 +1,17 @@
-#include "ButtonChecker.h"
+#include "libhwtests/ButtonChecker.h"
 
 IButtonChecker::IButtonChecker(uint8_t num_buttons)
 	: _num_buttons(num_buttons > kMaxChannels ? kMaxChannels : num_buttons)
 	, _cur_test_chan(0)
 	, _min_hold_time(200)
-	, _allowable_noise(100)
-	{
-	}
+	, _allowable_noise(100) {
+}
 
 void IButtonChecker::reset() {
 	_cur_test_chan = 0;
 	_test_state = WaitingFor::Press;
 
-	for (uint8_t i=0; i<_num_buttons; i++) {
+	for (uint8_t i = 0; i < _num_buttons; i++) {
 		_channel_error[i] = ErrorType::None;
 		_set_indicator(i, false);
 		_set_error_indicator(i, ErrorType::None);
@@ -45,8 +44,7 @@ bool IButtonChecker::_check_current_button() {
 			_debounce_timer++;
 			if (_debounce_timer >= _min_hold_time) {
 				_test_state = WaitingFor::Release;
-			}
-			else if (!but_pressed) {
+			} else if (!but_pressed) {
 				if (_debounce_timer > _allowable_noise) {
 					if (_channel_error[_cur_test_chan] != ErrorType::NoisyPress) {
 						_channel_error[_cur_test_chan] = ErrorType::NoisyPress;
@@ -72,8 +70,7 @@ bool IButtonChecker::_check_current_button() {
 						is_new_error = true;
 					}
 				}
-			}
-			else if (_debounce_timer >= _min_hold_time) {
+			} else if (_debounce_timer >= _min_hold_time) {
 				_set_indicator(_cur_test_chan, false);
 				_cur_test_chan++;
 				_set_indicator(_cur_test_chan, true);
@@ -102,4 +99,3 @@ IButtonChecker::ErrorType IButtonChecker::get_error(unsigned channel) {
 	else
 		return ErrorType::Unknown;
 }
-
