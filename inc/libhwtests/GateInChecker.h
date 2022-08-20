@@ -4,7 +4,7 @@
 class IGateInChecker {
 public:
 	IGateInChecker(uint8_t num_channels);
-	virtual ~IGateInChecker() = default;
+	// virtual ~IGateInChecker() = default;
 
 	bool check();
 	void reset();
