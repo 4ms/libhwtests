@@ -1,4 +1,4 @@
-#include "libhwtests/LEDTester.h"
+#include "libhwtests/LEDTester.hh"
 
 void ILEDTester::reset() {
 	_next_led = 0;

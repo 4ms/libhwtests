@@ -1,4 +1,4 @@
-#include "libhwtests/ButtonChecker.h"
+#include "libhwtests/ButtonChecker.hh"
 
 IButtonChecker::IButtonChecker(uint8_t num_buttons)
 	: _num_buttons(num_buttons > kMaxChannels ? kMaxChannels : num_buttons)

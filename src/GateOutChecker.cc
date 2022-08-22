@@ -1,4 +1,4 @@
-#include "libhwtests/GateOutChecker.h"
+#include "libhwtests/GateOutChecker.hh"
 #include <cstdint>
 
 //Todo: WIP, not complete

@@ -1,4 +1,4 @@
-#include "libhwtests/GateInChecker.h"
+#include "libhwtests/GateInChecker.hh"
 
 //Todo: integrate num_gates_high>1 as a fail for check()
 //Todo: check for 0->1 and 1->0 transition, instead of just 0 and 1
