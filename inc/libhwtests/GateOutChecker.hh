@@ -1,21 +1,39 @@
 #pragma once
 #include <cstdint>
 
-typedef void (*OutputGateFuncType)(uint8_t gate_num, bool newstate);
-
-//Todo: WIP, not complete
-class GateOutChecker {
+class IGateOutChecker {
 public:
-	GateOutChecker(uint8_t num_channels) {
+	IGateOutChecker(uint8_t num_channels) {
 		if (num_channels < 1)
 			num_channels = 1;
 		_num_channels = num_channels;
+		_num_toggles = 50;
 	}
-	void assign_output_gate_func(OutputGateFuncType output_gate_func);
-	void update_gateouts();
+
+	bool check();
+	void reset();
+	void skip();
+	void set_num_toggles(uint32_t num_toggles);
+
+	enum class ErrorType {
+		None,
+		StuckHigh,
+		StuckLow,
+	};
+	ErrorType get_error();
+
+protected:
+	virtual bool read_gate() = 0;
+	virtual void set_gate(uint32_t chan, bool newstate) = 0;
+	virtual void set_indicator(uint32_t indicate_num, bool newstate) = 0;
+	virtual void signal_jack_done(uint32_t chan) = 0;
 
 private:
-	OutputGateFuncType _output_gate;
-	uint8_t _num_channels;
-	uint8_t _ctr;
+	uint32_t _num_channels;
+	uint32_t _num_toggles;
+	uint32_t _cur_chan;
+	ErrorType _err;
+
+	bool _cur_out_state;
+	uint32_t _toggle_ctr;
 };
