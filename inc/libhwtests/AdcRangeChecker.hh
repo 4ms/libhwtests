@@ -9,13 +9,13 @@ struct AdcRangeCheckerBounds {
 	const uint16_t max_val;
 };
 
-enum AdcCheck_State {
-	ADCCHECK_NO_COVERAGE,
-	ADCCHECK_AT_MIN,
-	ADCCHECK_AT_MAX,
-	ADCCHECK_AT_CENTER,
-	ADCCHECK_ELSEWHERE,
-	ADCCHECK_FULLY_COVERED,
+enum class AdcCheckState {
+	NoCoverage,
+	AtMin,
+	AtMax,
+	AtCenter,
+	Elsewhere,
+	FullyCovered,
 };
 
 class AdcRangeChecker {
@@ -23,12 +23,11 @@ public:
 	AdcRangeChecker(const AdcRangeCheckerBounds &init);
 	void reset();
 	void set_adcval(uint16_t adcval);
-	AdcCheck_State check();
+	AdcCheckState check();
 
 private:
-	AdcRangeCheckerBounds _bounds;
+	const AdcRangeCheckerBounds _bounds;
 	uint32_t _coverage;
 	uint32_t _countdown;
 	uint16_t _cur_val;
 };
-

@@ -7,7 +7,7 @@ void IAdcChecker::run_test() {
 		auto adc_i = cur_adctype == Pot ? i : cur_adctype == BipolarCV ? i - num_pots : i - num_pots - num_bipolarCV;
 
 		pause_between_steps();
-		set_indicator(adc_i, cur_adctype, ADCCHECK_NO_COVERAGE);
+		set_indicator(adc_i, cur_adctype, AdcCheckState::NoCoverage);
 
 		bool done = false;
 		bool zeroes_ok = true;
@@ -23,22 +23,17 @@ void IAdcChecker::run_test() {
 				if (!zeroes_ok) {
 					show_multiple_nonzeros_error();
 					checker.reset();
-					set_indicator(adc_i, cur_adctype, ADCCHECK_NO_COVERAGE);
+					set_indicator(adc_i, cur_adctype, AdcCheckState::NoCoverage);
 				}
 			}
 
 			auto status = checker.check();
-			if (status == ADCCHECK_AT_MIN) {
-				set_indicator(adc_i, cur_adctype, ADCCHECK_AT_MIN);
-			} else if (status == ADCCHECK_AT_MAX) {
-				set_indicator(adc_i, cur_adctype, ADCCHECK_AT_MAX);
-			} else if (status == ADCCHECK_AT_CENTER) {
-				set_indicator(adc_i, cur_adctype, ADCCHECK_AT_CENTER);
-			} else if (status == ADCCHECK_ELSEWHERE) {
-				set_indicator(adc_i, cur_adctype, ADCCHECK_ELSEWHERE);
-			} else if (status == ADCCHECK_FULLY_COVERED) {
+
+			if (status == AdcCheckState::FullyCovered) {
 				done = true;
-			}
+			} else
+				set_indicator(adc_i, cur_adctype, status);
+
 			if (button_to_skip_step())
 				done = true;
 		}
