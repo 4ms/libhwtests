@@ -1,4 +1,4 @@
-#include "libhwtests/GateOutput.h"
+#include "libhwtests/GateOutput.hh"
 #include <cstdint>
 
 void GateOutput::assign_gate_onoff_func(GateOnOffFuncType gate_onoff_func) {
