@@ -7,8 +7,7 @@
 class ILEDTester {
 public:
 	ILEDTester(uint8_t num_leds)
-		: _num_leds(num_leds) {
-	}
+		: _num_leds(num_leds) {}
 
 	virtual void set_led(int led_id, bool turn_on) = 0;
 	virtual void pause_between_steps() = 0;
@@ -19,18 +18,17 @@ public:
 
 private:
 	uint8_t _num_leds;
-	uint8_t _next_led;
-	uint8_t _cur_led;
+	uint8_t _next_led = 0;
+	uint8_t _cur_led = 0;
 };
 
-//Deprecated (non-virtual class using function pointer)
+// Deprecated (non-virtual class using function pointer)
 class LEDTester {
 	typedef void (*IndicatorOnOffFuncType)(uint8_t indicator_num, bool newstate);
 
 public:
-	LEDTester(uint8_t num_leds)
-		: _num_leds(num_leds) {
-	}
+	[[deprecated]] LEDTester(uint8_t num_leds)
+		: _num_leds(num_leds) {}
 
 	void assign_led_onoff_func(IndicatorOnOffFuncType func);
 	void reset();
