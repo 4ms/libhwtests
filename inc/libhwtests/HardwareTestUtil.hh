@@ -1,12 +1,17 @@
 #pragma once
+#include <concepts>
 #include <cstdint>
 
-//Establishes the minimum needed to perform a hardware test: one button and one LED, and a way to delay
-//Base class must define these:
-// static bool main_button_pressed();
-// static void delay_ms(uint32_t ms);
-// static void set_main_button_led(bool turn_on);
-template<typename Base>
+template<typename T>
+concept HWBaseC = requires(T t) {
+					  { T::main_button_pressed() } -> std::same_as<bool>;
+					  T::delay_ms(uint32_t{});
+					  T::set_main_button_led(bool{});
+				  };
+
+// Establishes the minimum needed to perform a hardware test: one button and one
+// LED, and a way to delay
+template<HWBaseC Base>
 struct HardwareTestUtil {
 
 	static bool main_button_pressed() {
