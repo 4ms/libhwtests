@@ -7,6 +7,11 @@ IButtonChecker::IButtonChecker(uint8_t num_buttons)
 	, _allowable_noise(100) {
 }
 
+void IButtonChecker::run_test() {
+    reset();
+    while(check());
+}
+
 void IButtonChecker::reset() {
 	_cur_test_chan = 0;
 	_test_state = WaitingFor::Press;

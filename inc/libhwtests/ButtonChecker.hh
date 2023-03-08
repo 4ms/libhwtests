@@ -8,6 +8,8 @@ public:
 	IButtonChecker(uint8_t num_channels);
 	virtual ~IButtonChecker() {
 	}
+
+    void run_test();
 	bool check();
 	void reset();
 	void set_min_steady_state_time(uint32_t min_hold_time);
