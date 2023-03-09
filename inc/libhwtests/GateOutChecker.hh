@@ -10,6 +10,7 @@ public:
 		_num_toggles = 50;
 	}
 
+	void run_test();
 	bool check();
 	void reset();
 	void skip();

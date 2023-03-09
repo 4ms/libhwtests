@@ -1,6 +1,12 @@
 #include "libhwtests/GateOutChecker.hh"
 #include <cstdint>
 
+void IGateOutChecker::run_test() {
+	reset();
+	while (check())
+		;
+}
+
 bool IGateOutChecker::check() {
 	if (_cur_chan >= _num_channels)
 		return false;
@@ -28,14 +34,8 @@ void IGateOutChecker::reset() {
 		set_indicator(i, i == _cur_chan);
 }
 
-void IGateOutChecker::skip() {
-	_cur_chan++;
-}
+void IGateOutChecker::skip() { _cur_chan++; }
 
-void IGateOutChecker::set_num_toggles(uint32_t num_toggles) {
-	_num_toggles = num_toggles;
-}
+void IGateOutChecker::set_num_toggles(uint32_t num_toggles) { _num_toggles = num_toggles; }
 
-IGateOutChecker::ErrorType IGateOutChecker::get_error() {
-	return _err;
-}
+IGateOutChecker::ErrorType IGateOutChecker::get_error() { return _err; }
