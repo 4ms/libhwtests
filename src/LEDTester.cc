@@ -2,10 +2,13 @@
 
 void ILEDTester::reset() {
 	_cur_led = 0;
-	set_led(0, true);
-	for (uint8_t i = 1; i < _num_leds; i++) {
+	for (uint8_t i = 0; i < _num_leds; i++) {
 		set_led(i, false);
 	}
+	// Make sure to set this after turning all LEDs off
+	// In case some "led" elements are actually multiple
+	// elements to test color blending
+	set_led(0, true);
 }
 
 bool ILEDTester::is_done() {
