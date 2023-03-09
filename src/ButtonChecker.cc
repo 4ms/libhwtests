@@ -4,12 +4,12 @@ IButtonChecker::IButtonChecker(uint8_t num_buttons)
 	: _num_buttons(num_buttons > kMaxChannels ? kMaxChannels : num_buttons)
 	, _cur_test_chan(0)
 	, _min_hold_time(200)
-	, _allowable_noise(100) {
-}
+	, _allowable_noise(100) {}
 
 void IButtonChecker::run_test() {
-    reset();
-    while(check());
+	reset();
+	while (check())
+		;
 }
 
 void IButtonChecker::reset() {
@@ -86,17 +86,11 @@ bool IButtonChecker::_check_current_button() {
 	return is_new_error;
 }
 
-void IButtonChecker::set_min_steady_state_time(uint32_t min_hold_time) {
-	_min_hold_time = min_hold_time;
-}
+void IButtonChecker::set_min_steady_state_time(uint32_t min_hold_time) { _min_hold_time = min_hold_time; }
 
-void IButtonChecker::set_allowable_noise(uint32_t allowable_noise) {
-	_allowable_noise = allowable_noise;
-}
+void IButtonChecker::set_allowable_noise(uint32_t allowable_noise) { _allowable_noise = allowable_noise; }
 
-uint8_t IButtonChecker::button_under_test() {
-	return _cur_test_chan;
-}
+uint8_t IButtonChecker::button_under_test() { return _cur_test_chan; }
 
 IButtonChecker::ErrorType IButtonChecker::get_error(unsigned channel) {
 	if (channel < _num_buttons)
