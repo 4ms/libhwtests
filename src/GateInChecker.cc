@@ -1,16 +1,18 @@
 #include "libhwtests/GateInChecker.hh"
 
-//Todo: integrate num_gates_high>1 as a fail for check()
-//Todo: check for 0->1 and 1->0 transition, instead of just 0 and 1
+// Todo: integrate num_gates_high>1 as a fail for check()
+// Todo: check for 0->1 and 1->0 transition, instead of just 0 and 1
+void IGateInChecker::run_test() {
+	reset();
+	while (check())
+		;
+}
 
 IGateInChecker::IGateInChecker(uint8_t num_channels)
 	: _num_channels(num_channels)
-	, _num_repeats(10) {
-}
+	, _num_repeats(10) {}
 
-void IGateInChecker::clear_error() {
-	_error = ErrorType::None;
-}
+void IGateInChecker::clear_error() { _error = ErrorType::None; }
 
 void IGateInChecker::reset() {
 	_cur_test_chan = 0;
@@ -65,10 +67,10 @@ void IGateInChecker::_check_current_gate_in() {
 	if (_cur_test_state >= _num_repeats) {
 		_error = ErrorType::None;
 		set_indicator(_cur_test_chan, false);
+		signal_jack_done(_cur_test_chan);
 		_cur_test_chan++;
 		_cur_test_state = 0;
 		set_test_signal(false);
-		signal_jack_done(_cur_test_chan);
 	}
 }
 
@@ -86,10 +88,6 @@ void IGateInChecker::_check_max_one_gate_high() {
 	set_error_indicator(_cur_test_chan, _error);
 }
 
-void IGateInChecker::set_num_toggles(uint32_t num_toggles) {
-	_num_repeats = num_toggles;
-}
+void IGateInChecker::set_num_toggles(uint32_t num_toggles) { _num_repeats = num_toggles; }
 
-IGateInChecker::ErrorType IGateInChecker::get_error() {
-	return _error;
-}
+IGateInChecker::ErrorType IGateInChecker::get_error() { return _error; }

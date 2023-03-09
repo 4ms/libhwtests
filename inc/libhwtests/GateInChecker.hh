@@ -5,6 +5,7 @@ class IGateInChecker {
 public:
 	IGateInChecker(uint8_t num_channels);
 
+	void run_test();
 	bool check();
 	void reset();
 	void skip();
