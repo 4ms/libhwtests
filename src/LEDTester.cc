@@ -34,28 +34,28 @@ void ILEDTester::run_test() {
 	}
 }
 
-[[deprecated]] void LEDTester::assign_led_onoff_func(IndicatorOnOffFuncType func) { _set_led = func; }
+// [[deprecated]] void LEDTester::assign_led_onoff_func(IndicatorOnOffFuncType func) { _set_led = func; }
 
-[[deprecated]] void LEDTester::reset() {
-	_next_led = 0;
-	_cur_led = 0;
-	for (uint8_t i = 0; i < _num_leds; i++) {
-		_set_led(i, false);
-	}
-}
+// [[deprecated]] void LEDTester::reset() {
+// 	_next_led = 0;
+// 	_cur_led = 0;
+// 	for (uint8_t i = 0; i < _num_leds; i++) {
+// 		_set_led(i, false);
+// 	}
+// }
 
-[[deprecated]] bool LEDTester::is_done() {
-	if (_next_led >= _num_leds)
-		return true;
-	else
-		return false;
-}
+// [[deprecated]] bool LEDTester::is_done() {
+// 	if (_next_led >= _num_leds)
+// 		return true;
+// 	else
+// 		return false;
+// }
 
-[[deprecated]] void LEDTester::next_led() {
-	if (is_done())
-		return;
-	_set_led(_cur_led, false);
-	_set_led(_next_led, true);
-	_cur_led = _next_led;
-	_next_led++;
-}
+// [[deprecated]] void LEDTester::next_led() {
+// 	if (is_done())
+// 		return;
+// 	_set_led(_cur_led, false);
+// 	_set_led(_next_led, true);
+// 	_cur_led = _next_led;
+// 	_next_led++;
+// }
