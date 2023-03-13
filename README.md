@@ -48,7 +48,7 @@ Done:
 
 Example:
 
-```
+```c++
 #include "libhwtests/ButtonChecker.hh"
 #include "my_board_config.hh"
 
