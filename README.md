@@ -34,7 +34,7 @@ Todo:
 
 Done:
   * ADC input range tester: tests if a pot or CV input can go full range
-    * Helper callbacks for ADC input range testers.
+	* Helper callbacks for ADC input range testers.
   * ADC channel isolation tester
   * DAC/Codec output test helper callback functions
   * Generic I2C peripheral ping tester
@@ -53,7 +53,7 @@ Example:
 #include "my_board_config.hh"
 
 struct TestButtons : IButtonChecker {
-    constexpr static number_of_buttons = 3;
+	constexpr static number_of_buttons = 3;
 
 	TestButtons()
 		: IButtonChecker{number_of_buttons} {
@@ -73,14 +73,14 @@ struct TestButtons : IButtonChecker {
 	}
 
 	void _set_error_indicator(uint8_t channel, ErrorType err) override { 
-        Board::PlayLED.set_color(Colors::red);
+		Board::PlayLED.set_color(Colors::red);
 
-        // Print the error to a terminal
-        // printf("Button Test Failed! Button %d, Error Code %d\n", channel, (uint32_t)err);
-    }
+		// Print the error to a terminal
+		// printf("Button Test Failed! Button %d, Error Code %d\n", channel, (uint32_t)err);
+	}
 
 	void _set_indicator(uint8_t indicator_num, bool newstate) override {
-        auto color = newstate ? Colors::green : Colors::off;
+		auto color = newstate ? Colors::green : Colors::off;
 
 		if (indicator_num == 0)
 			Board::BankLED.set_color(color);
@@ -89,7 +89,7 @@ struct TestButtons : IButtonChecker {
 		if (indicator_num == 2)
 			Board::RevLED.set_color(color);
 
-        // printf("Press button %d\n");
+		// printf("Press button %d\n");
 	}
 
 	void _check_max_one_pin_changed() override {
@@ -98,10 +98,10 @@ struct TestButtons : IButtonChecker {
 };
 
 void run_hardware_tests() {
-    TestButtons tester;
-    tester.run_tests();
+	TestButtons tester;
+	tester.run_tests();
 
-    //run more tests...
+	//run more tests...
 }
 
 ```
