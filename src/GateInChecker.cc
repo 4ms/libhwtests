@@ -4,8 +4,10 @@
 // Todo: check for 0->1 and 1->0 transition, instead of just 0 and 1
 void IGateInChecker::run_test() {
 	reset();
-	while (check())
-		;
+	while (check()) {
+		if (button_to_skip_step())
+			skip();
+	}
 }
 
 IGateInChecker::IGateInChecker(uint8_t num_channels)

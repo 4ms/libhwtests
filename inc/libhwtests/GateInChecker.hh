@@ -27,6 +27,7 @@ protected:
 	virtual void set_indicator(uint8_t indicate_num, bool newstate) = 0;
 	virtual void signal_jack_done(uint8_t chan) = 0;
 	virtual bool is_ready_to_read_jack(uint8_t chan) = 0;
+	virtual bool button_to_skip_step() { return false; }
 
 private:
 	ErrorType _error;
