@@ -25,9 +25,17 @@ public:
 	void set_adcval(uint16_t adcval);
 	AdcCheckState check();
 
+	uint32_t get_cur() { return _cur_val; }
+	uint32_t get_max() { return _max_val; }
+	uint32_t get_min() { return _min_val; }
+
 private:
 	const AdcRangeCheckerBounds _bounds;
-	uint32_t _coverage;
+	bool _hit_max = false;
+	bool _hit_min = false;
 	uint32_t _countdown;
 	uint16_t _cur_val;
+
+	uint32_t _min_val = 4095;
+	uint32_t _max_val = 0;
 };

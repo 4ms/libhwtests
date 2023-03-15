@@ -29,10 +29,10 @@ void IAdcChecker::run_test() {
 
 			auto status = checker.check();
 
+			set_indicator(adc_i, cur_adctype, status);
 			if (status == AdcCheckState::FullyCovered) {
 				done = true;
-			} else
-				set_indicator(adc_i, cur_adctype, status);
+			}
 
 			if (button_to_skip_step())
 				done = true;

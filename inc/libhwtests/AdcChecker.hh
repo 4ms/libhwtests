@@ -17,8 +17,7 @@ struct IAdcChecker {
 		, num_pots(num_pots)
 		, num_bipolarCV(num_bipolarCV)
 		, num_unipolarCV(num_unipolarCV)
-		, num_adc(num_pots + num_bipolarCV + num_unipolarCV) {
-	}
+		, num_adc(num_pots + num_bipolarCV + num_unipolarCV) {}
 
 	~IAdcChecker() = default;
 
@@ -29,6 +28,10 @@ struct IAdcChecker {
 	virtual bool button_to_skip_step() = 0;
 	virtual void delay_ms(uint32_t x) = 0;
 
+	uint32_t get_last_max() { return checker.get_max(); }
+	uint32_t get_last_min() { return checker.get_min(); }
+	uint32_t get_cur_val() { return checker.get_cur(); }
+
 	void run_test();
 
 private:
@@ -38,6 +41,7 @@ private:
 	const uint8_t num_unipolarCV;
 	const uint8_t num_adc;
 
+	// FIXME: finish this, and use AdcRangeCheckerBounds
 	bool _check_max_one_cv_is_nonzero(uint32_t width, uint32_t center) {
 		uint8_t num_nonzero = 0;
 
