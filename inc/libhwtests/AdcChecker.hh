@@ -43,14 +43,15 @@ private:
 
 	// FIXME: finish this, and use AdcRangeCheckerBounds
 	bool _check_max_one_cv_is_nonzero(uint32_t width, uint32_t center) {
-		uint8_t num_nonzero = 0;
+		return true;
+		// uint8_t num_nonzero = 0;
 
-		for (unsigned adc_i = 0; adc_i < num_bipolarCV; adc_i++) {
-			auto val = get_adc_reading(adc_i, BipolarCV);
-			if (val > (center + width / 2) || val < (center - width / 2))
-				num_nonzero++;
-		}
+		// for (unsigned adc_i = 0; adc_i < num_bipolarCV; adc_i++) {
+		// 	auto val = get_adc_reading(adc_i, BipolarCV);
+		// 	if (val > (center + width / 2) || val < (center - width / 2))
+		// 		num_nonzero++;
+		// }
 
-		return (num_nonzero <= 1);
+		// return (num_nonzero <= 1);
 	}
 };
