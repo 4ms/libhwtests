@@ -6,7 +6,6 @@ void IAdcChecker::run_test() {
 
 		auto adc_i = cur_adctype == Pot ? i : cur_adctype == BipolarCV ? i - num_pots : i - num_pots - num_bipolarCV;
 
-		pause_between_steps();
 		set_indicator(adc_i, cur_adctype, AdcCheckState::NoCoverage);
 
 		bool done = false;
@@ -37,6 +36,7 @@ void IAdcChecker::run_test() {
 			if (button_to_skip_step())
 				done = true;
 		}
-		delay_ms(100);
+		pause_between_steps();
+		// delay_ms(100);
 	}
 }
