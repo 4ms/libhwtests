@@ -24,6 +24,20 @@ protected:
 	float _cur_phase;
 };
 
+class SinOsc : public OutputStream {
+public:
+	SinOsc(float sample_rate = 48000.0f);
+	SinOsc(float freqHz, float amp, float initial_phase, float sample_rate);
+	void init(float freqHz, float amp, float initial_phase, float sample_rate);
+	float update();
+
+private:
+	float _inc;
+	float _amp;
+	float _cur_phase;
+	bool _is_rising;
+};
+
 class SkewedTriOsc : public OutputStream {
 public:
 	SkewedTriOsc(float sample_rate = 48000.0f);
@@ -77,7 +91,9 @@ class ManualValue : public OutputStream {
 
 public:
 	ManualValue()
-		: OutputStream(48000.f) { _val = 0; }
+		: OutputStream(48000.f) {
+		_val = 0;
+	}
 	virtual float update() { return _val; }
 	void set_val(const float val) { _val = val; }
 };
@@ -94,9 +110,9 @@ struct CodecCallbacks_TwoCodecs {
 	static inline OutputStream *rightOutCodec2 = nullptr;
 };
 
-//Todo: make it more clear how to use:
-//SampleT <-- int16_t for 16-bit samples within frames with 32-bits per channel (padding will be added after sample data)
-//SampleT <-- int32_t for 24-bit samples within frames with 32-bits per channel (must pad before calling)
+// Todo: make it more clear how to use:
+// SampleT <-- int16_t for 16-bit samples within frames with 32-bits per channel (padding will be added after sample
+// data) SampleT <-- int32_t for 24-bit samples within frames with 32-bits per channel (must pad before calling)
 template<typename SampleT, int BlockSz>
 struct CodecCallbacks {
 	static inline OutputStream *leftStream = nullptr;
@@ -106,8 +122,7 @@ struct CodecCallbacks {
 		if (leftStream == nullptr || rightStream == nullptr)
 			return;
 
-		for (int i = 0; i < BlockSz; i++)
-		{
+		for (int i = 0; i < BlockSz; i++) {
 			float l_sample = leftStream->update();
 			*dst++ = (SampleT)l_sample;
 			if (sizeof(SampleT) <= 2)
@@ -119,12 +134,11 @@ struct CodecCallbacks {
 				*dst++ = 0;
 		}
 
-		(void)(*src); //unused
+		(void)(*src); // unused
 	}
 
 	static void passthruPlusTestWave(SampleT *src, SampleT *dst) {
-		for (int i = 0; i < BlockSz; i++)
-		{
+		for (int i = 0; i < BlockSz; i++) {
 			float l_sample = leftStream->update();
 			*dst++ = ((SampleT)l_sample) / 2 + (*src++);
 			if (sizeof(SampleT) <= 2)
@@ -137,4 +151,3 @@ struct CodecCallbacks {
 		}
 	}
 };
-

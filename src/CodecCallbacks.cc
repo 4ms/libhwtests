@@ -1,13 +1,14 @@
 #include "libhwtests/CodecCallbacks.hh"
-//Todo: make base class contain common elements (min/max/phase)
+#include <cmath>
+
+// Todo: make base class contain common elements (min/max/phase)
 
 TestRampUpOscillator::TestRampUpOscillator(float freqHz, float max, float min, float initial_phase, float sample_rate)
 	: OutputStream(sample_rate)
 	, _inc(freqHz / sample_rate)
 	, _max(max)
 	, _min(min)
-	, _cur_phase(initial_phase) {
-}
+	, _cur_phase(initial_phase) {}
 
 void TestRampUpOscillator::init(float freqHz, float max, float min, float initial_phase, float sample_rate) {
 	_sample_rate = sample_rate;
@@ -25,9 +26,41 @@ float TestRampUpOscillator::update() {
 	return ((_cur_phase * (_max - _min)) + _min);
 }
 
-TestGateOscillator::TestGateOscillator(float sample_rate)
-	: OutputStream(sample_rate) {
+SinOsc::SinOsc(float freqHz, float amp, float initial_phase, float sample_rate)
+	: OutputStream(sample_rate)
+	, _inc(freqHz / sample_rate)
+	, _amp(amp)
+	, _cur_phase(initial_phase) {}
+
+void SinOsc::init(float freqHz, float amp, float initial_phase, float sample_rate) {
+	_sample_rate = sample_rate;
+	_inc = freqHz / sample_rate;
+	_amp = amp;
+	_cur_phase = initial_phase;
 }
+
+constexpr static float faster_sine(float x) {
+	x = (x * 2.f) - 1.f;
+	return 4.f * (x - x * std::abs(x));
+}
+
+static_assert(faster_sine(0) == 0.f);
+static_assert(faster_sine(0.25f) == -0.99999999f);
+static_assert(faster_sine(0.5f) == 0.f);
+static_assert(faster_sine(0.75f) == 1.f);
+static_assert(faster_sine(1.f) == 0.f);
+
+float SinOsc::update() {
+	_cur_phase += _inc;
+	while (_cur_phase > 1.f)
+		_cur_phase -= 1.f;
+
+	auto sin = faster_sine(_cur_phase);
+	return sin * _amp / 2;
+}
+
+TestGateOscillator::TestGateOscillator(float sample_rate)
+	: OutputStream(sample_rate) {}
 
 TestGateOscillator::TestGateOscillator(
 	float freqHz, float pw, float max, float min, float initial_phase, float sample_rate)
@@ -36,8 +69,7 @@ TestGateOscillator::TestGateOscillator(
 	, _pw(pw)
 	, _max(max)
 	, _min(min)
-	, _cur_phase(initial_phase) {
-}
+	, _cur_phase(initial_phase) {}
 
 void TestGateOscillator::init(float freqHz, float pw, float max, float min, float initial_phase, float sample_rate) {
 	_sample_rate = sample_rate;
@@ -57,8 +89,7 @@ float TestGateOscillator::update() {
 }
 
 SkewedTriOsc::SkewedTriOsc(float sample_rate)
-	: OutputStream(sample_rate) {
-}
+	: OutputStream(sample_rate) {}
 
 SkewedTriOsc::SkewedTriOsc(float freqHz, float riseRatio, float max, float min, float initial_phase, float sample_rate)
 	: OutputStream(sample_rate)
@@ -98,8 +129,7 @@ float SkewedTriOsc::update() {
 }
 
 CenterFlatRamp::CenterFlatRamp(float sample_rate)
-	: OutputStream(sample_rate) {
-}
+	: OutputStream(sample_rate) {}
 
 CenterFlatRamp::CenterFlatRamp(
 	float freqHz, float flat_width, float max, float min, float initial_phase, float sample_rate)
@@ -110,8 +140,7 @@ CenterFlatRamp::CenterFlatRamp(
 	, _nonflat_slope(0.5f / _flat_start)
 	, _max(max)
 	, _min(min)
-	, _cur_phase(initial_phase) {
-}
+	, _cur_phase(initial_phase) {}
 
 void CenterFlatRamp::init(
 	float freqHz, float flat_width, float max, float min, float initial_phase, float sample_rate) {
@@ -167,7 +196,7 @@ void CodecCallbacks_TwoCodecs::testWavesOut(SampleT *src, SampleT *dst, uint16_t
 		*dst++ = (int16_t)rightOut;
 		*dst++ = 0;
 	}
-	(void)(*src); //unused
+	(void)(*src); // unused
 }
 
 void CodecCallbacks_TwoCodecs::passthruPlusTestWave(SampleT *src, SampleT *dst, uint16_t sz, uint8_t channel) {
