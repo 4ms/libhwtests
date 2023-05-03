@@ -64,7 +64,7 @@ struct HardwareTestUtil {
 		bool longhold_detected = false;
 		Base::set_main_button_led(false);
 		while (Base::main_button_pressed()) {
-			if (++press_tmr > 20000000) {
+			if (++press_tmr > 50000000) {
 				longhold_detected = true;
 				Base::set_main_button_led(true);
 			}
