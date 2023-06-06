@@ -16,9 +16,13 @@ concept HWBaseC = requires(T t) {
 template<HWBaseC Base>
 struct HardwareTestUtil {
 
-	static bool main_button_pressed() { return Base::main_button_pressed(); }
+	static bool main_button_pressed() {
+		return Base::main_button_pressed();
+	}
 
-	static void delay_ms(uint32_t ms) { Base::delay_ms(ms); }
+	static void delay_ms(uint32_t ms) {
+		Base::delay_ms(ms);
+	}
 
 	static void pause_until_button_pressed() {
 		Base::delay_ms(10);
@@ -37,7 +41,7 @@ struct HardwareTestUtil {
 		pause_until_button_released();
 	}
 
-	static void flash_mainbut_until_pressed() {
+	static void flash_mainbut_until_just_pressed() {
 		while (true) {
 			Base::set_main_button_led(false);
 
@@ -56,15 +60,22 @@ struct HardwareTestUtil {
 			if (Base::main_button_pressed())
 				break;
 		}
+	}
+
+	static void flash_mainbut_until_pressed() {
+		flash_mainbut_until_just_pressed();
 		pause_until_button_released();
 	}
 
-	static bool check_for_longhold_button() {
+	static bool check_for_longhold_button(uint32_t ms = 5000) {
 		uint32_t press_tmr = 0;
 		bool longhold_detected = false;
+		constexpr uint32_t step_size = 50;
+
 		Base::set_main_button_led(false);
 		while (Base::main_button_pressed()) {
-			if (++press_tmr > 50000000) {
+			Base::delay_ms(step_size);
+			if (++press_tmr > (ms / step_size)) {
 				longhold_detected = true;
 				Base::set_main_button_led(true);
 			}
