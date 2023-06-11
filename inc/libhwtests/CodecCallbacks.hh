@@ -15,7 +15,7 @@ class TestRampUpOscillator : public OutputStream {
 public:
 	TestRampUpOscillator(float freqHz, float max, float min, float initial_phase, float sample_rate);
 	void init(float freqHz, float max, float min, float initial_phase, float sample_rate);
-	float update();
+	float update() override;
 
 protected:
 	float _inc;
@@ -29,7 +29,7 @@ public:
 	SinOsc(float sample_rate = 48000.0f);
 	SinOsc(float freqHz, float amp, float initial_phase, float sample_rate);
 	void init(float freqHz, float amp, float initial_phase, float sample_rate);
-	float update();
+	float update() override;
 
 private:
 	float _inc;
@@ -43,7 +43,7 @@ public:
 	SkewedTriOsc(float sample_rate = 48000.0f);
 	SkewedTriOsc(float freqHz, float riseRatio, float max, float min, float initial_phase, float sample_rate);
 	void init(float freqHz, float riseRatio, float max, float min, float initial_phase, float sample_rate);
-	float update();
+	float update() override;
 
 private:
 	float _rise_inc;
@@ -59,7 +59,7 @@ public:
 	CenterFlatRamp(float sample_rate = 48000.0f);
 	CenterFlatRamp(float freqHz, float flat_width, float max, float min, float initial_phase, float sample_rate);
 	void init(float freqHz, float flat_width, float max, float min, float initial_phase, float sample_rate);
-	float update();
+	float update() override;
 
 private:
 	float _inc;
@@ -76,7 +76,7 @@ public:
 	TestGateOscillator(float sample_rate = 48000.0f);
 	TestGateOscillator(float freqHz, float pw, float max, float min, float initial_phase, float sample_rate);
 	void init(float freqHz, float pw, float max, float min, float initial_phase, float sample_rate);
-	float update();
+	float update() override;
 
 private:
 	float _inc;
@@ -94,7 +94,7 @@ public:
 		: OutputStream(48000.f) {
 		_val = 0;
 	}
-	virtual float update() { return _val; }
+	virtual float update() override { return _val; }
 	void set_val(const float val) { _val = val; }
 };
 
